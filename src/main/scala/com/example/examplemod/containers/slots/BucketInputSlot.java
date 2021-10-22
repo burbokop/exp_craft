@@ -5,9 +5,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class BacketInputSlot extends Slot {
+public class BucketInputSlot extends Slot {
 
-	public BacketInputSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+	public BucketInputSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
 		super(inventoryIn, index, xPosition, yPosition);
 	}
 

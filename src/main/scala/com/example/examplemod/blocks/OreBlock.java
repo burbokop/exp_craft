@@ -3,7 +3,7 @@ package com.example.examplemod.blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
-public class OreBlock extends BaseBlock {
+public class OreBlock extends BlockBase {
 	public OreBlock(String name) {
 		super(Material.ROCK, name);
 	

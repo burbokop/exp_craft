@@ -4,8 +4,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class BacketOutputSlot extends Slot {
-	public BacketOutputSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+public class BucketOutputSlot extends Slot {
+	public BucketOutputSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
 		super(inventoryIn, index, xPosition, yPosition);
 	}
 

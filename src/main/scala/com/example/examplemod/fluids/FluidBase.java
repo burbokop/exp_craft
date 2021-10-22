@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BaseFluid extends Fluid {
+public class FluidBase extends Fluid {
 	protected static int mapColor = 0xFFFFFFFF;
 	protected static float overlayAlpha = 0.2F;
 	protected static SoundEvent emptySound = SoundEvents.ITEM_BUCKET_EMPTY;
@@ -27,16 +27,16 @@ public class BaseFluid extends Fluid {
 		}
 	}
 
-	public BaseFluid(String fluidName, ResourceLocation still, ResourceLocation flowing) {
+	public FluidBase(String fluidName, ResourceLocation still, ResourceLocation flowing) {
 		super(fluidName, still, flowing);
 	}
 
-	public BaseFluid(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor) {
+	public FluidBase(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor) {
 		this(fluidName, still, flowing);
 		setColor(mapColor);
 	}
 
-	public BaseFluid(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor, float overlayAlpha) {
+	public FluidBase(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor, float overlayAlpha) {
 		this(fluidName, still, flowing, mapColor);
 		setAlpha(overlayAlpha);
 	}
@@ -46,7 +46,7 @@ public class BaseFluid extends Fluid {
 		return mapColor;
 	}
 
-	public BaseFluid setColor(int parColor) {
+	public FluidBase setColor(int parColor) {
 		mapColor = parColor;
 		return this;
 	}
@@ -55,13 +55,13 @@ public class BaseFluid extends Fluid {
 		return overlayAlpha;
 	}
 
-	public BaseFluid setAlpha(float parOverlayAlpha) {
+	public FluidBase setAlpha(float parOverlayAlpha) {
 		overlayAlpha = parOverlayAlpha;
 		return this;
 	}
 
 	@Override
-	public BaseFluid setEmptySound(SoundEvent parSound) {
+	public FluidBase setEmptySound(SoundEvent parSound) {
 		emptySound = parSound;
 		return this;
 	}
@@ -72,7 +72,7 @@ public class BaseFluid extends Fluid {
 	}
 
 	@Override
-	public BaseFluid setFillSound(SoundEvent parSound) {
+	public FluidBase setFillSound(SoundEvent parSound) {
 		fillSound = parSound;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class BaseFluid extends Fluid {
 		return fillSound;
 	}
 
-	public BaseFluid setMaterial(Material parMaterial) {
+	public FluidBase setMaterial(Material parMaterial) {
 		material = parMaterial;
 		return this;
 	}

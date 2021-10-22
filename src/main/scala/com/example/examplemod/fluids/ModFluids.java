@@ -12,12 +12,12 @@ import net.minecraftforge.fluids.Fluid;
 
 
 public class ModFluids {
-	public static final BaseFluid SLIME = (BaseFluid) new BaseFluid(
-			"slime", 
-			new ResourceLocation("examplemod:blocks/slime_still"), 
-			new ResourceLocation("examplemod:blocks/slime_flow")
+	public static final FluidBase EXP = (FluidBase) new FluidBase(
+			"exp",
+			new ResourceLocation("examplemod:blocks/exp_still"),
+			new ResourceLocation("examplemod:blocks/exp_flow")
 			)
-			.setMaterial(ModMaterials.SLIME)
+			.setMaterial(ModMaterials.EXP)
 			.setDensity(1100)
 			.setGaseous(false)
 			.setLuminosity(9)
@@ -25,8 +25,8 @@ public class ModFluids {
 			.setTemperature(300);
 
 	public static void register() {
-		BaseFluid.registerAll(
-				SLIME
+		FluidBase.registerAll(
+				EXP
 				);
 	}
 

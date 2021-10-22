@@ -2,11 +2,11 @@ package com.example.examplemod.gui;
 
 import javax.vecmath.Point2i;
 
+import com.example.examplemod.containers.ExpDrainMachineContainer;
+import com.example.examplemod.entities.ExpDrainMachineTileEntity;
 import org.lwjgl.util.Rectangle;
 
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.containers.MashineContainer;
-import com.example.examplemod.entities.MashineTileEntity;
 import com.example.examplemod.utils.PlayerSlotsTemplate.InvalidSlotsSequence;
 import com.example.examplemod.utils.TankWidget;
 
@@ -24,18 +24,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.example.examplemod.utils.PointInRectDetector;
 
 @SideOnly(Side.CLIENT)
-public class MashineGuiScreen extends GuiContainer {
+public class ExpDrainMachineGui extends GuiContainer {
 
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExampleMod.MODID + ":textures/gui/guimashine.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExampleMod.MODID + ":textures/gui/gui_exp_drain_machine.png");
 	private static final Point2i BACKGROUND_SIZE = new Point2i(176, 166);
 
 	private static final Rectangle TANK_RECT = new Rectangle(100, 26, 12, 47);
 
-	private MashineTileEntity tileEntity;
+	private ExpDrainMachineTileEntity tileEntity;
 	private InventoryPlayer player;
 
-	public MashineGuiScreen(InventoryPlayer player, MashineTileEntity tileEntity) throws InvalidSlotsSequence {
-		super(new MashineContainer(player, tileEntity));
+	public ExpDrainMachineGui(InventoryPlayer player, ExpDrainMachineTileEntity tileEntity) throws InvalidSlotsSequence {
+		super(new ExpDrainMachineContainer(player, tileEntity));
 		this.player = player;
 		this.tileEntity = tileEntity;		
 	}
@@ -91,7 +91,7 @@ public class MashineGuiScreen extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String tileEntityName = getTileEntityDisplayName();
 
-		int iterator = this.tileEntity.getField(MashineTileEntity.EnumFields.ITERATOR.ordinal());
+		int iterator = this.tileEntity.getField(ExpDrainMachineTileEntity.EnumFields.ITERATOR.ordinal());
 
 		fontRenderer.drawString(tileEntityName + ":" + iterator, xSize / 2 - fontRenderer.getStringWidth(tileEntityName) / 2, 6, 4210752);
 		fontRenderer.drawString(getPlayerDisplayName(), 8, ySize - 96 + 2, 4210752);
@@ -156,8 +156,8 @@ public class MashineGuiScreen extends GuiContainer {
 	}
 
 	private int getBurnLeftScaled(int pixels) {
-		int i = this.tileEntity.getField(MashineTileEntity.EnumFields.TOTAL_BURN_TIME.ordinal());
+		int i = this.tileEntity.getField(ExpDrainMachineTileEntity.EnumFields.TOTAL_BURN_TIME.ordinal());
 		if(i == 0) i = Integer.MAX_VALUE;
-		return this.tileEntity.getField(MashineTileEntity.EnumFields.BURN_TIME.ordinal()) * pixels / i;
+		return this.tileEntity.getField(ExpDrainMachineTileEntity.EnumFields.BURN_TIME.ordinal()) * pixels / i;
 	}
 }

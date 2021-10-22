@@ -7,6 +7,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModTileEntities {
 	public static void register() {
-		GameRegistry.registerTileEntity(MashineTileEntity.class, new ResourceLocation(ExampleMod.MODID + ":tiles/mashine"));
+		GameRegistry.registerTileEntity(ExpDrainMachineTileEntity.class, new ResourceLocation(ExampleMod.MODID + ":tiles/exp_drain_machine"));
 	}
 }

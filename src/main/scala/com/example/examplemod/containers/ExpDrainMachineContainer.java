@@ -1,15 +1,13 @@
 package com.example.examplemod.containers;
 
-import com.example.examplemod.containers.slots.BacketInputSlot;
-import com.example.examplemod.containers.slots.BacketOutputSlot;
+import com.example.examplemod.containers.slots.BucketInputSlot;
+import com.example.examplemod.containers.slots.BucketOutputSlot;
 import com.example.examplemod.containers.slots.SolidFuelSlot;
-import com.example.examplemod.entities.MashineTileEntity;
+import com.example.examplemod.entities.ExpDrainMachineTileEntity;
 import com.example.examplemod.utils.FieldsChangeDetector;
 import com.example.examplemod.utils.PlayerSlotsTemplate;
 import com.example.examplemod.utils.PlayerSlotsTemplate.InvalidSlotsSequence;
 import com.ibm.icu.impl.Assert;
-
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -21,24 +19,24 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MashineContainer extends Container {
+public class ExpDrainMachineContainer extends Container {
 
-	private final MashineTileEntity tileEntity;
+	private final ExpDrainMachineTileEntity tileEntity;
 
 	private final FieldsChangeDetector fieldsChangeDetector;
 
 	private static final PlayerSlotsTemplate PLAYER_SLOTS = new PlayerSlotsTemplate(
-			MashineTileEntity.SLOT_COUNT, 
+			ExpDrainMachineTileEntity.EnumSlot.values().length,
 			PlayerSlotsTemplate.DEFAULT_OFFSET
 			);
 
-	public MashineContainer(InventoryPlayer player, MashineTileEntity tileEntity) throws InvalidSlotsSequence {
+	public ExpDrainMachineContainer(InventoryPlayer player, ExpDrainMachineTileEntity tileEntity) throws InvalidSlotsSequence {
 		Assert.assrt(tileEntity != null);
 		this.tileEntity = tileEntity;		
 
-		addSlotToContainer(new SolidFuelSlot(tileEntity, MashineTileEntity.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
-		addSlotToContainer(new BacketInputSlot(tileEntity, MashineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
-		addSlotToContainer(new BacketOutputSlot(tileEntity, MashineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));				
+		addSlotToContainer(new SolidFuelSlot(tileEntity, ExpDrainMachineTileEntity.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
+		addSlotToContainer(new BucketInputSlot(tileEntity, ExpDrainMachineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
+		addSlotToContainer(new BucketOutputSlot(tileEntity, ExpDrainMachineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));
 		PLAYER_SLOTS.addSlots(player, new PlayerSlotsTemplate.SlotsList() {
 			@Override
 			public void addSlot(Slot slot) { addSlotToContainer(slot); }
@@ -89,21 +87,21 @@ public class MashineContainer extends Container {
 			ItemStack itemStack2 = slot.getStack();
 			itemStack1 = itemStack2.copy();
 
-			if (index == MashineTileEntity.EnumSlot.FUEL_SLOT.ordinal()) {
+			if (index == ExpDrainMachineTileEntity.EnumSlot.FUEL_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("FUEL_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (index == MashineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal()) {
+			} else if (index == ExpDrainMachineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("BUCKET_INPUT_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (index == MashineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal()) {
+			} else if (index == ExpDrainMachineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("BUCKET_OUTPUT_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
@@ -114,7 +112,7 @@ public class MashineContainer extends Container {
 				playerIn.sendMessage(new TextComponentString("PLAYER_SLOT"));
 
 				boolean merged = false;
-				for(MashineTileEntity.EnumSlot e : MashineTileEntity.EnumSlot.values()) {
+				for(ExpDrainMachineTileEntity.EnumSlot e : ExpDrainMachineTileEntity.EnumSlot.values()) {
 					if(inventorySlots.get(e.ordinal()).isItemValid(itemStack2)) {
 						if (!mergeItemStack(itemStack2, e.ordinal(), e.ordinal() + 1, false)) {
 							return ItemStack.EMPTY;

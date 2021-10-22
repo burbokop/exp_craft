@@ -1,7 +1,6 @@
-package com.example.examplemod.network.sec
+package com.example.examplemod.network
 
 import com.example.examplemod.entities.TileEntityBase
-import com.example.examplemod.network.PacketRequestUpdateTileEntity
 import io.netty.buffer.ByteBuf
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
@@ -9,7 +8,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.network.simpleimpl.{IMessage, IMessageHandler, MessageContext}
 
 
-class PRUTE2() extends IMessage {
+class MessageRequestUpdateTileEntity() extends IMessage {
   private var pos: BlockPos = null
   private var dimension: Int = 0
 
@@ -34,13 +33,13 @@ class PRUTE2() extends IMessage {
   }
 }
 
-object PRUTE2 {
-  class Handler extends IMessageHandler[PRUTE2, PUTE2] {
-    @SuppressWarnings(Array("unchecked")) override def onMessage(message: PRUTE2, ctx: MessageContext): PUTE2 = {
+object MessageRequestUpdateTileEntity {
+  class Handler extends IMessageHandler[MessageRequestUpdateTileEntity, MessageUpdateTileEntity] {
+    override def onMessage(message: MessageRequestUpdateTileEntity, ctx: MessageContext): MessageUpdateTileEntity = {
       val world = FMLCommonHandler.instance.getMinecraftServerInstance.getWorld(message.dimension)
       val tileEntity = world.getTileEntity(message.pos).asInstanceOf[TileEntityBase]
 
-      if (tileEntity != null) return new PUTE2(Option(tileEntity))
+      if (tileEntity != null) return new MessageUpdateTileEntity(Option(tileEntity))
       null
     }
   }

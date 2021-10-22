@@ -1,8 +1,8 @@
 package com.example.examplemod.handlers;
 
-import com.example.examplemod.containers.MashineContainer;
-import com.example.examplemod.entities.MashineTileEntity;
-import com.example.examplemod.gui.MashineGuiScreen;
+import com.example.examplemod.containers.ExpDrainMachineContainer;
+import com.example.examplemod.entities.ExpDrainMachineTileEntity;
+import com.example.examplemod.gui.ExpDrainMachineGui;
 import com.example.examplemod.utils.PlayerSlotsTemplate.InvalidSlotsSequence;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,9 +14,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MashineGuiHandler implements IGuiHandler {
+public class GuiHandler implements IGuiHandler {
 	public enum GuiEnum {
-	    MASHINE
+	    EXP_DRAIN_MACHINE
 	}
 	
 	
@@ -24,9 +24,9 @@ public class MashineGuiHandler implements IGuiHandler {
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
         if (tileEntity != null) {
-            if (ID == GuiEnum.MASHINE.ordinal()) {
+            if (ID == GuiEnum.EXP_DRAIN_MACHINE.ordinal()) {
                 try {
-					return new MashineContainer(player.inventory, (MashineTileEntity)tileEntity);
+					return new ExpDrainMachineContainer(player.inventory, (ExpDrainMachineTileEntity) tileEntity);
 				} catch (InvalidSlotsSequence e) {					
 					e.printStackTrace();
 				}
@@ -39,9 +39,9 @@ public class MashineGuiHandler implements IGuiHandler {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
         if (tileEntity != null) {
-            if (ID == GuiEnum.MASHINE.ordinal()) {
+            if (ID == GuiEnum.EXP_DRAIN_MACHINE.ordinal()) {
                 try {
-					return new MashineGuiScreen(player.inventory, (MashineTileEntity)tileEntity);
+					return new ExpDrainMachineGui(player.inventory, (ExpDrainMachineTileEntity) tileEntity);
 				} catch (InvalidSlotsSequence e) {
 					e.printStackTrace();
 				}
@@ -49,5 +49,4 @@ public class MashineGuiHandler implements IGuiHandler {
         }
         return null;
 	}
-
 }

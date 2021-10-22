@@ -5,10 +5,10 @@ import com.example.examplemod.ExampleMod;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-public class BaseItem extends Item {
+public class ItemBase extends Item {
 	protected String name;
 
-	public BaseItem(String name) {
+	public ItemBase(String name) {
 		this.name = name;
 		setUnlocalizedName(name);
 		setRegistryName(name);
@@ -19,7 +19,7 @@ public class BaseItem extends Item {
 	}
 	
 	@Override
-	public BaseItem setCreativeTab(CreativeTabs tab) {
+	public ItemBase setCreativeTab(CreativeTabs tab) {
 		super.setCreativeTab(tab);
 		return this;
 	}

@@ -10,9 +10,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
-public class BaseBlockFluidFinite extends BlockFluidClassic {
+public class BlockFluidBase extends BlockFluidClassic {
 
-    public BaseBlockFluidFinite(Fluid fluid, Material material, MapColor mapColor) {
+    public BlockFluidBase(Fluid fluid, Material material, MapColor mapColor) {
         super(fluid, material, mapColor);        
         
         setUnlocalizedName(fluid.getName());
@@ -20,7 +20,7 @@ public class BaseBlockFluidFinite extends BlockFluidClassic {
 		setCreativeTab(CreativeTabs.INVENTORY);
     }
     
-	public BaseBlockFluidFinite(Fluid fluid, Material material) {
+	public BlockFluidBase(Fluid fluid, Material material) {
 		super(fluid, material);
 
 		setUnlocalizedName(fluid.getName());
@@ -37,13 +37,13 @@ public class BaseBlockFluidFinite extends BlockFluidClassic {
 	}
 	
 	@Override
-	public BaseBlockFluidFinite setCreativeTab(CreativeTabs tab) {
+	public BlockFluidBase setCreativeTab(CreativeTabs tab) {
 		super.setCreativeTab(tab);
 		return this;
 	}
 	
 	@Override
-    public BaseBlockFluidFinite setDensity(int density) {
+    public BlockFluidBase setDensity(int density) {
 		super.setDensity(density);
 		return this;
 	}

@@ -1,10 +1,9 @@
 package com.example.examplemod.blocks;
 
-
 import com.example.examplemod.ExampleMod;
-import com.example.examplemod.entities.MashineTileEntity;
+import com.example.examplemod.entities.ExpDrainMachineTileEntity;
 import com.example.examplemod.entities.TileEntityBase;
-import com.example.examplemod.handlers.MashineGuiHandler;
+import com.example.examplemod.handlers.GuiHandler;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,8 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MashineBlock extends TileEntityBlock<MashineTileEntity> {
-	public MashineBlock(String name) {
+public class ExpDrainMachineBlock extends TileEntityBlock<ExpDrainMachineTileEntity> {
+	public ExpDrainMachineBlock(String name) {
 		super(Material.IRON, name);
 	}
 
@@ -37,7 +36,7 @@ public class MashineBlock extends TileEntityBlock<MashineTileEntity> {
 			) {
 		playerIn.openGui(
 				ExampleMod.instance, 
-				MashineGuiHandler.GuiEnum.MASHINE.ordinal(), 
+				GuiHandler.GuiEnum.EXP_DRAIN_MACHINE.ordinal(),
 				worldIn, 
 				pos.getX(), 
 				pos.getY(), 
@@ -52,19 +51,22 @@ public class MashineBlock extends TileEntityBlock<MashineTileEntity> {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
-		TileEntityBase tileEntity = (TileEntityBase)getTileEntity(worldIn, pos);
+		TileEntityBase tileEntity = getTileEntity(worldIn, pos);
 		if (tileEntity != null) {
 			tileEntity.onEntityCollision(entityIn);
 		}
 	}
 
 	@Override
-	public Class<MashineTileEntity> getTileEntityClass() {		
-		return MashineTileEntity.class;
+	public Class<ExpDrainMachineTileEntity> getTileEntityClass() {
+		return ExpDrainMachineTileEntity.class;
 	}
 
 	@Override
-	public MashineTileEntity createTileEntity(World world, IBlockState state) {
-		return new MashineTileEntity();
+	public ExpDrainMachineTileEntity createTileEntity(World world, IBlockState state) {
+		return new ExpDrainMachineTileEntity(
+				0.05f,
+				1
+		);
 	}
 }

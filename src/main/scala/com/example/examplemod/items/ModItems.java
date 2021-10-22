@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModItems {	
-	public static BaseItem iii = new BaseItem("iii").setCreativeTab(ExampleMod.CREATIVE_TAB);	
+	public static ItemBase iii = new ItemBase("iii").setCreativeTab(ExampleMod.CREATIVE_TAB);
 	
 	public static void register(IForgeRegistry<Item> registry) {
 		registry.registerAll(

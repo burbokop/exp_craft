@@ -10,34 +10,31 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
 	public static final OreBlock iiiOre = new OreBlock("ore_iii").setCreativeTab(ExampleMod.CREATIVE_TAB);
-	public static final BaseBlockFluidFinite MY_FLUID_BLOCK = new BaseBlockFluidFinite(ModFluids.SLIME, ModMaterials.SLIME).setDensity(1);
+	public static final BlockFluidBase EXP_BLOCK = new BlockFluidBase(ModFluids.EXP, ModMaterials.EXP).setDensity(1);
 	
-	public static final MashineBlock MASHINE_BLOCK = (MashineBlock) new MashineBlock("mashine").setCreativeTab(ExampleMod.CREATIVE_TAB);
+	public static final ExpDrainMachineBlock EXP_DRAIN_MACHINE_BLOCK = (ExpDrainMachineBlock) new ExpDrainMachineBlock("exp_drain_machine").setCreativeTab(ExampleMod.CREATIVE_TAB);
 	
 	public static void register(IForgeRegistry<Block> registry) {
-		System.out.println("MY_FLUID_BLOCK.getFluid().getName(): " + MY_FLUID_BLOCK.getFluid().getName());
-		System.out.println("MY_FLUID_BLOCK.getRegistryName(): " + MY_FLUID_BLOCK.getRegistryName());
 		registry.registerAll(
 				iiiOre,
-				MY_FLUID_BLOCK,
-				MASHINE_BLOCK
+				EXP_BLOCK,
+				EXP_DRAIN_MACHINE_BLOCK
 		);
 	}
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
 		registry.registerAll(
 				iiiOre.createItemBlock(),
-				MY_FLUID_BLOCK.createItemBlock(),
-				MASHINE_BLOCK.createItemBlock()
+				EXP_BLOCK.createItemBlock(),
+				EXP_DRAIN_MACHINE_BLOCK.createItemBlock()
 		);
 	}
 
 	public static void registerModels() {
 		iiiOre.registerItemModel(Item.getItemFromBlock(iiiOre));
-		MY_FLUID_BLOCK.registerItemModel(Item.getItemFromBlock(MY_FLUID_BLOCK));
+		EXP_BLOCK.registerItemModel(Item.getItemFromBlock(EXP_BLOCK));
+		EXP_DRAIN_MACHINE_BLOCK.registerItemModel(Item.getItemFromBlock(EXP_DRAIN_MACHINE_BLOCK));
 		
-		MASHINE_BLOCK.registerItemModel(Item.getItemFromBlock(MASHINE_BLOCK));
-		
-		ExampleMod.proxy.registerFluidBlockRenderer(MY_FLUID_BLOCK, MY_FLUID_BLOCK.getFluid().getName());
+		ExampleMod.proxy.registerFluidBlockRenderer(EXP_BLOCK, EXP_BLOCK.getFluid().getName());
 	}
 }
