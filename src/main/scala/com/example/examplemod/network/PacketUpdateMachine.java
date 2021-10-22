@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.example.examplemod.network;
 
 import com.example.examplemod.entities.MashineTileEntity;
 import com.example.examplemod.utils.PacketBufferMod;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketUpdateMashine implements IMessage {
+public class PacketUpdateMachine implements IMessage {
 	private BlockPos pos;
 
 	private FluidStack stack;
@@ -21,7 +21,7 @@ public class PacketUpdateMashine implements IMessage {
 	
 	private long lastChangeTime;
 	
-	public PacketUpdateMashine(
+	public PacketUpdateMachine(
 			BlockPos pos, 
 			FluidStack stack, 
 			int burnTime, 
@@ -34,11 +34,11 @@ public class PacketUpdateMashine implements IMessage {
 		this.totalBurnTime = totalBurnTime;
 	}
 	
-	public PacketUpdateMashine(MashineTileEntity te) {
-		this(te.getPos(), te.fluidTank.getFluid(), te.burnTime, te.totalBurnTime, te.lastChangeTime);
+	public PacketUpdateMachine(MashineTileEntity te) {
+		this(te.getPos(), te.sharedData.fluidTank.getFluid(), te.sharedData.burnTime, te.sharedData.totalBurnTime, te.getLastChangeTime());
 	}
 	
-	public PacketUpdateMashine() {}
+	public PacketUpdateMachine() {}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
@@ -66,15 +66,14 @@ public class PacketUpdateMashine implements IMessage {
         buf.writeLong(lastChangeTime);
 	}
 
-	public static class Handler implements IMessageHandler<PacketUpdateMashine, IMessage> {
+	public static class Handler implements IMessageHandler<PacketUpdateMachine, IMessage> {
 		@Override
-		public IMessage onMessage(PacketUpdateMashine message, MessageContext ctx) {
+		public IMessage onMessage(PacketUpdateMachine message, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				MashineTileEntity te = (MashineTileEntity)Minecraft.getMinecraft().world.getTileEntity(message.pos);
-				te.fluidTank.setFluid(message.stack);
-				te.burnTime = message.burnTime;
-				te.totalBurnTime = message.totalBurnTime;
-				te.lastChangeTime = message.lastChangeTime;				
+				te.sharedData.fluidTank.setFluid(message.stack);
+				te.sharedData.burnTime = message.burnTime;
+				te.sharedData.totalBurnTime = message.totalBurnTime;								
 			});
 			return null;
 		}

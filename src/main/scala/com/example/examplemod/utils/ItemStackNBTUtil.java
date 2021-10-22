@@ -5,15 +5,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class ItemStackNBTMarker {
+public class ItemStackNBTUtil {
 	
 	private String tagName;
 	
-	public ItemStackNBTMarker(String tagName) {
+	public ItemStackNBTUtil(String tagName) {
 		this.tagName = tagName;
 	}
 	
-	public static final ItemStackNBTMarker DEFAULT = new ItemStackNBTMarker("Items");
+	public static final ItemStackNBTUtil DEFAULT = new ItemStackNBTUtil("Items");
 	
 	public NBTTagCompound saveItemStackList(NBTTagCompound tag, ItemStack []itemStacks) {
         NBTTagList tagList = new NBTTagList();

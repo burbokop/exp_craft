@@ -1,5 +1,6 @@
 package com.example.examplemod;
 
+import com.example.examplemod.network.PacketRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,11 +25,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 import com.example.examplemod.blocks.ModBlocks;
+import com.example.examplemod.entities.MashineTileEntity;
 import com.example.examplemod.entities.ModTileEntities;
+import com.example.examplemod.entities.TileEntityBase;
 import com.example.examplemod.fluids.ModFluids;
 import com.example.examplemod.handlers.MashineGuiHandler;
 import com.example.examplemod.items.ModItems;
 import com.example.examplemod.proxy.CommonProxy;
+
+//import com.example.examplemod.utils.SSS;
 
 @Mod(modid = ExampleMod.MODID, name = ExampleMod.NAME, version = ExampleMod.VERSION)
 public class ExampleMod {
@@ -45,7 +50,7 @@ public class ExampleMod {
     public static SimpleNetworkWrapper network;
     
     @Mod.EventBusSubscriber
-	public static class RegsitrationHandler {
+	public static class RegistrationHandler {
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -85,8 +90,13 @@ public class ExampleMod {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();     
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-        network.registerMessage(new PacketUpdateMashine.Handler(), PacketUpdateMashine.class, 0, Side.CLIENT);
-		network.registerMessage(new PacketRequestUpdateMashine.Handler(), PacketRequestUpdateMashine.class, 1, Side.SERVER);
+        //network.registerMessage(new PacketUpdateMashine.Handler(), PacketUpdateMashine.class, 0, Side.CLIENT);
+		//network.registerMessage(new PacketRequestUpdateMashine.Handler(), PacketRequestUpdateMashine.class, 1, Side.SERVER);
+        //int nextId = 0;
+        //nextId = PacketRegistry.registerSharedData(MashineTileEntity.SharedData.class, network, nextId);
+
+        PacketRegistry.register2(network);
+
         ModFluids.register();        
     }
 

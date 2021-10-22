@@ -36,9 +36,9 @@ public class MashineContainer extends Container {
 		Assert.assrt(tileEntity != null);
 		this.tileEntity = tileEntity;		
 
-		addSlotToContainer(new SolidFuelSlot(tileEntity, MashineTileEntity.SlotEnum.FUEL_SLOT.ordinal(), 72, 57));
-		addSlotToContainer(new BacketInputSlot(tileEntity, MashineTileEntity.SlotEnum.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
-		addSlotToContainer(new BacketOutputSlot(tileEntity, MashineTileEntity.SlotEnum.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));				
+		addSlotToContainer(new SolidFuelSlot(tileEntity, MashineTileEntity.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
+		addSlotToContainer(new BacketInputSlot(tileEntity, MashineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
+		addSlotToContainer(new BacketOutputSlot(tileEntity, MashineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));				
 		PLAYER_SLOTS.addSlots(player, new PlayerSlotsTemplate.SlotsList() {
 			@Override
 			public void addSlot(Slot slot) { addSlotToContainer(slot); }
@@ -82,16 +82,6 @@ public class MashineContainer extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		playerIn.sendMessage(new TextComponentString(
-				"content { FUEL_SLOT: " + inventorySlots.get(MashineTileEntity.SlotEnum.FUEL_SLOT.ordinal()).getStack() +
-				" BUCKET_INPUT_SLOT: " + inventorySlots.get(MashineTileEntity.SlotEnum.BUCKET_INPUT_SLOT.ordinal()).getStack() +
-				" BUCKET_OUTPUT_SLOT: " + inventorySlots.get(MashineTileEntity.SlotEnum.BUCKET_OUTPUT_SLOT.ordinal()).getStack() +
-				" }"
-				));
-
-		playerIn.sendMessage(new TextComponentString("can interact with player: " + canInteractWith(playerIn)));
-
-
 		ItemStack itemStack1 = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(index);
 
@@ -99,21 +89,21 @@ public class MashineContainer extends Container {
 			ItemStack itemStack2 = slot.getStack();
 			itemStack1 = itemStack2.copy();
 
-			if (index == MashineTileEntity.SlotEnum.FUEL_SLOT.ordinal()) {
+			if (index == MashineTileEntity.EnumSlot.FUEL_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("FUEL_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (index == MashineTileEntity.SlotEnum.BUCKET_INPUT_SLOT.ordinal()) {
+			} else if (index == MashineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("BUCKET_INPUT_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (index == MashineTileEntity.SlotEnum.BUCKET_OUTPUT_SLOT.ordinal()) {
+			} else if (index == MashineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("BUCKET_OUTPUT_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
@@ -124,7 +114,7 @@ public class MashineContainer extends Container {
 				playerIn.sendMessage(new TextComponentString("PLAYER_SLOT"));
 
 				boolean merged = false;
-				for(MashineTileEntity.SlotEnum e : MashineTileEntity.SlotEnum.values()) {
+				for(MashineTileEntity.EnumSlot e : MashineTileEntity.EnumSlot.values()) {
 					if(inventorySlots.get(e.ordinal()).isItemValid(itemStack2)) {
 						if (!mergeItemStack(itemStack2, e.ordinal(), e.ordinal() + 1, false)) {
 							return ItemStack.EMPTY;

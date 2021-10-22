@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.example.examplemod.network;
 
 import com.example.examplemod.entities.MashineTileEntity;
 
@@ -37,13 +37,13 @@ public class PacketRequestUpdateMashine implements IMessage {
 		buf.writeInt(dimension);
 	}
 
-	public static class Handler implements IMessageHandler<PacketRequestUpdateMashine, PacketUpdateMashine> {		
+	public static class Handler implements IMessageHandler<PacketRequestUpdateMashine, PacketUpdateMachine> {
 		@Override
-		public PacketUpdateMashine onMessage(PacketRequestUpdateMashine message, MessageContext ctx) {
+		public PacketUpdateMachine onMessage(PacketRequestUpdateMashine message, MessageContext ctx) {
 			World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(message.dimension);
 			MashineTileEntity te = (MashineTileEntity)world.getTileEntity(message.pos);
 			if (te != null) {
-				return new PacketUpdateMashine(te);
+				return new PacketUpdateMachine(te);
 			} else {
 				return null;
 			}
