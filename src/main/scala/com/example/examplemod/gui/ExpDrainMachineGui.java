@@ -3,7 +3,7 @@ package com.example.examplemod.gui;
 import javax.vecmath.Point2i;
 
 import com.example.examplemod.containers.ExpDrainMachineContainer;
-import com.example.examplemod.entities.ExpDrainMachineTileEntity;
+import com.example.examplemod.entities.TileEntityExpDrainMachine;
 import org.lwjgl.util.Rectangle;
 
 import com.example.examplemod.ExampleMod;
@@ -31,10 +31,10 @@ public class ExpDrainMachineGui extends GuiContainer {
 
 	private static final Rectangle TANK_RECT = new Rectangle(100, 26, 12, 47);
 
-	private ExpDrainMachineTileEntity tileEntity;
+	private TileEntityExpDrainMachine tileEntity;
 	private InventoryPlayer player;
 
-	public ExpDrainMachineGui(InventoryPlayer player, ExpDrainMachineTileEntity tileEntity) throws InvalidSlotsSequence {
+	public ExpDrainMachineGui(InventoryPlayer player, TileEntityExpDrainMachine tileEntity) throws InvalidSlotsSequence {
 		super(new ExpDrainMachineContainer(player, tileEntity));
 		this.player = player;
 		this.tileEntity = tileEntity;		
@@ -91,7 +91,7 @@ public class ExpDrainMachineGui extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String tileEntityName = getTileEntityDisplayName();
 
-		int iterator = this.tileEntity.getField(ExpDrainMachineTileEntity.EnumFields.ITERATOR.ordinal());
+		int iterator = this.tileEntity.getField(TileEntityExpDrainMachine.EnumFields.ITERATOR.ordinal());
 
 		fontRenderer.drawString(tileEntityName + ":" + iterator, xSize / 2 - fontRenderer.getStringWidth(tileEntityName) / 2, 6, 4210752);
 		fontRenderer.drawString(getPlayerDisplayName(), 8, ySize - 96 + 2, 4210752);
@@ -156,8 +156,8 @@ public class ExpDrainMachineGui extends GuiContainer {
 	}
 
 	private int getBurnLeftScaled(int pixels) {
-		int i = this.tileEntity.getField(ExpDrainMachineTileEntity.EnumFields.TOTAL_BURN_TIME.ordinal());
+		int i = this.tileEntity.getField(TileEntityExpDrainMachine.EnumFields.TOTAL_BURN_TIME.ordinal());
 		if(i == 0) i = Integer.MAX_VALUE;
-		return this.tileEntity.getField(ExpDrainMachineTileEntity.EnumFields.BURN_TIME.ordinal()) * pixels / i;
+		return this.tileEntity.getField(TileEntityExpDrainMachine.EnumFields.BURN_TIME.ordinal()) * pixels / i;
 	}
 }

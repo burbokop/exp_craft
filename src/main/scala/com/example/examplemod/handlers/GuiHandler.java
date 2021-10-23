@@ -1,7 +1,7 @@
 package com.example.examplemod.handlers;
 
 import com.example.examplemod.containers.ExpDrainMachineContainer;
-import com.example.examplemod.entities.ExpDrainMachineTileEntity;
+import com.example.examplemod.entities.TileEntityExpDrainMachine;
 import com.example.examplemod.gui.ExpDrainMachineGui;
 import com.example.examplemod.utils.PlayerSlotsTemplate.InvalidSlotsSequence;
 
@@ -26,7 +26,7 @@ public class GuiHandler implements IGuiHandler {
         if (tileEntity != null) {
             if (ID == GuiEnum.EXP_DRAIN_MACHINE.ordinal()) {
                 try {
-					return new ExpDrainMachineContainer(player.inventory, (ExpDrainMachineTileEntity) tileEntity);
+					return new ExpDrainMachineContainer(player.inventory, (TileEntityExpDrainMachine) tileEntity);
 				} catch (InvalidSlotsSequence e) {					
 					e.printStackTrace();
 				}
@@ -41,7 +41,7 @@ public class GuiHandler implements IGuiHandler {
         if (tileEntity != null) {
             if (ID == GuiEnum.EXP_DRAIN_MACHINE.ordinal()) {
                 try {
-					return new ExpDrainMachineGui(player.inventory, (ExpDrainMachineTileEntity) tileEntity);
+					return new ExpDrainMachineGui(player.inventory, (TileEntityExpDrainMachine) tileEntity);
 				} catch (InvalidSlotsSequence e) {
 					e.printStackTrace();
 				}

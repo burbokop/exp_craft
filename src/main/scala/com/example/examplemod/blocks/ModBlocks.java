@@ -9,10 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
-	public static final OreBlock iiiOre = new OreBlock("ore_iii").setCreativeTab(ExampleMod.CREATIVE_TAB);
+	public static final BlockOre iiiOre = new BlockOre("ore_iii").setCreativeTab(ExampleMod.CREATIVE_TAB);
 	public static final BlockFluidBase EXP_BLOCK = new BlockFluidBase(ModFluids.EXP, ModMaterials.EXP).setDensity(1);
 	
-	public static final ExpDrainMachineBlock EXP_DRAIN_MACHINE_BLOCK = (ExpDrainMachineBlock) new ExpDrainMachineBlock("exp_drain_machine").setCreativeTab(ExampleMod.CREATIVE_TAB);
+	public static final BlockExpDrainMachine EXP_DRAIN_MACHINE_BLOCK = (BlockExpDrainMachine) new BlockExpDrainMachine("exp_drain_machine").setCreativeTab(ExampleMod.CREATIVE_TAB);
 	
 	public static void register(IForgeRegistry<Block> registry) {
 		registry.registerAll(

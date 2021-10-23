@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "burning=false,facing=north": { "model": "examplemod:exp_drain_machine" },
+    "burning=false,facing=east": { "model": "examplemod:exp_drain_machine", "y": 90 },
+    "burning=false,facing=south": { "model": "examplemod:exp_drain_machine", "y": 180 },
+    "burning=false,facing=west": { "model": "examplemod:exp_drain_machine", "y": 270 },
+    "burning=true,facing=north": { "model": "examplemod:lit_exp_drain_machine" },
+    "burning=true,facing=east": { "model": "examplemod:lit_exp_drain_machine", "y": 90 },
+    "burning=true,facing=south": { "model": "examplemod:lit_exp_drain_machine", "y": 180 },
+    "burning=true,facing=west": { "model": "examplemod:lit_exp_drain_machine", "y":270  }
+  }
+}

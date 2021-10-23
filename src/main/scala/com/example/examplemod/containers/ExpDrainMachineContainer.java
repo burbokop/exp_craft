@@ -3,7 +3,7 @@ package com.example.examplemod.containers;
 import com.example.examplemod.containers.slots.BucketInputSlot;
 import com.example.examplemod.containers.slots.BucketOutputSlot;
 import com.example.examplemod.containers.slots.SolidFuelSlot;
-import com.example.examplemod.entities.ExpDrainMachineTileEntity;
+import com.example.examplemod.entities.TileEntityExpDrainMachine;
 import com.example.examplemod.utils.FieldsChangeDetector;
 import com.example.examplemod.utils.PlayerSlotsTemplate;
 import com.example.examplemod.utils.PlayerSlotsTemplate.InvalidSlotsSequence;
@@ -21,22 +21,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ExpDrainMachineContainer extends Container {
 
-	private final ExpDrainMachineTileEntity tileEntity;
+	private final TileEntityExpDrainMachine tileEntity;
 
 	private final FieldsChangeDetector fieldsChangeDetector;
 
 	private static final PlayerSlotsTemplate PLAYER_SLOTS = new PlayerSlotsTemplate(
-			ExpDrainMachineTileEntity.EnumSlot.values().length,
+			TileEntityExpDrainMachine.EnumSlot.values().length,
 			PlayerSlotsTemplate.DEFAULT_OFFSET
 			);
 
-	public ExpDrainMachineContainer(InventoryPlayer player, ExpDrainMachineTileEntity tileEntity) throws InvalidSlotsSequence {
+	public ExpDrainMachineContainer(InventoryPlayer player, TileEntityExpDrainMachine tileEntity) throws InvalidSlotsSequence {
 		Assert.assrt(tileEntity != null);
 		this.tileEntity = tileEntity;		
 
-		addSlotToContainer(new SolidFuelSlot(tileEntity, ExpDrainMachineTileEntity.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
-		addSlotToContainer(new BucketInputSlot(tileEntity, ExpDrainMachineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
-		addSlotToContainer(new BucketOutputSlot(tileEntity, ExpDrainMachineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));
+		addSlotToContainer(new SolidFuelSlot(tileEntity, TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
+		addSlotToContainer(new BucketInputSlot(tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
+		addSlotToContainer(new BucketOutputSlot(tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));
 		PLAYER_SLOTS.addSlots(player, new PlayerSlotsTemplate.SlotsList() {
 			@Override
 			public void addSlot(Slot slot) { addSlotToContainer(slot); }
@@ -87,21 +87,21 @@ public class ExpDrainMachineContainer extends Container {
 			ItemStack itemStack2 = slot.getStack();
 			itemStack1 = itemStack2.copy();
 
-			if (index == ExpDrainMachineTileEntity.EnumSlot.FUEL_SLOT.ordinal()) {
+			if (index == TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("FUEL_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (index == ExpDrainMachineTileEntity.EnumSlot.BUCKET_INPUT_SLOT.ordinal()) {
+			} else if (index == TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("BUCKET_INPUT_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (index == ExpDrainMachineTileEntity.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal()) {
+			} else if (index == TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal()) {
 				playerIn.sendMessage(new TextComponentString("BUCKET_OUTPUT_SLOT"));
 				if (!mergeItemStack(itemStack2, PLAYER_SLOTS.beginSlot(), PLAYER_SLOTS.endSlot(), true)) {
 					return ItemStack.EMPTY;
@@ -112,7 +112,7 @@ public class ExpDrainMachineContainer extends Container {
 				playerIn.sendMessage(new TextComponentString("PLAYER_SLOT"));
 
 				boolean merged = false;
-				for(ExpDrainMachineTileEntity.EnumSlot e : ExpDrainMachineTileEntity.EnumSlot.values()) {
+				for(TileEntityExpDrainMachine.EnumSlot e : TileEntityExpDrainMachine.EnumSlot.values()) {
 					if(inventorySlots.get(e.ordinal()).isItemValid(itemStack2)) {
 						if (!mergeItemStack(itemStack2, e.ordinal(), e.ordinal() + 1, false)) {
 							return ItemStack.EMPTY;

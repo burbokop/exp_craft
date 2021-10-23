@@ -3,6 +3,7 @@ package com.example.examplemod.entities;
 
 import java.util.List;
 
+import com.example.examplemod.blocks.BlockExpDrainMachine;
 import com.example.examplemod.fluids.ModFluids;
 import com.example.examplemod.utils.BurningUtils;
 import com.example.examplemod.utils.ExpUtils;
@@ -29,14 +30,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrainMachineTileEntity.EnumSlot> implements ITickable {
+public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEntityExpDrainMachine.EnumSlot> implements ITickable {
 	private int expConvertAmount;
 	private int expConvertIntervalTicks;
 	private FluidTank fluidTank;
 	private int burnTime;
 	private int totalBurnTime;
-
-
 
 	public enum EnumSlot {
 		FUEL_SLOT,
@@ -44,15 +43,22 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 		BUCKET_OUTPUT_SLOT
 	}
 
-	public ExpDrainMachineTileEntity(float expConvertIntervalSec, int expConvertAmount) {
+	public TileEntityExpDrainMachine() {
 		super(EnumSlot.values().length);
-		this.expConvertAmount = expConvertAmount;
-		this.expConvertIntervalTicks = (int)(expConvertIntervalSec * 20.0f);
-
-		List<EnumFacing> allFacings = Arrays.asList(EnumFacing.VALUES);
-
-		this.fluidTank = new InternalFluidTank("fluidTank", new ArrayList<>(), allFacings, ModFluids.fluidPredicate(ModFluids.EXP), 8000);
+		this.fluidTank = new InternalFluidTank("fluidTank", new ArrayList<>(), Arrays.asList(EnumFacing.VALUES), ModFluids.fluidPredicate(ModFluids.EXP), 8000);
 		this.fluidTank.setTileEntity(this);
+
+		this.expConvertAmount = 1;
+		this.expConvertIntervalTicks = 1; // 0.05 sec
+	}
+
+	public TileEntityExpDrainMachine(float expConvertIntervalSec, int expConvertAmount) {
+		this();
+
+		// TODO - sending to client or something else
+		//this.expConvertAmount = expConvertAmount;
+		//this.expConvertIntervalTicks = (int) (expConvertIntervalSec * 20.0f);
+
 	}
 
 	@Override
@@ -61,6 +67,8 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 		this.burnTime = compound.getInteger("BurnTime");
 		this.totalBurnTime = compound.getInteger("TotalBurnTime");
 		this.iterator = compound.getInteger("It");
+		this.expConvertAmount = compound.getInteger("ExpConvertAmount");
+		this.expConvertIntervalTicks = compound.getInteger("ExpConvertIntervalTicks");
 		this.fluidTank.readFromNBT(compound.getCompoundTag("FluidTank"));
 		//this.lastChangeTime = compound.getLong("LastChangeTime");
 	}
@@ -71,6 +79,8 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 		compound.setInteger("BurnTime", (short)this.burnTime);
 		compound.setInteger("TotalBurnTime", (short)this.totalBurnTime);
 		compound.setInteger("It", (short)this.iterator);
+		compound.setInteger("ExpConvertAmount", this.expConvertAmount);
+		compound.setInteger("ExpConvertIntervalTicks", this.expConvertIntervalTicks);
 
 		NBTTagCompound fluidTankCompound = new NBTTagCompound();
 		this.fluidTank.writeToNBT(fluidTankCompound);
@@ -87,6 +97,8 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 		this.fluidTank.setFluid(data.readFluidStack());
 		this.burnTime = buf.readInt();
 		this.totalBurnTime = buf.readInt();
+		this.expConvertAmount = buf.readInt();
+		this.expConvertIntervalTicks = buf.readInt();
 	}
 
 	@Override
@@ -98,6 +110,8 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 
 		buf.writeInt(this.burnTime);
 		buf.writeInt(this.totalBurnTime);
+		buf.writeInt(this.expConvertAmount);
+		buf.writeInt(this.expConvertIntervalTicks);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -174,11 +188,18 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 		return this.burnTime > 0;
 	}
 
+	public boolean isConvertTick() {
+		if(expConvertIntervalTicks != 0) {
+			return iterator % expConvertIntervalTicks == 0;
+		}
+		return false;
+	}
+
 	@Override
 	public void update() {
 		if (!world.isRemote) {
+			BlockExpDrainMachine.setState(isBurning(), world, pos);
 			iterator++;
-
 
 			List<EntityPlayer> playersInTop = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(0, 1, 0)));
 			EntityPlayer playerWithExp = null;
@@ -203,12 +224,10 @@ public class ExpDrainMachineTileEntity extends TileEntityInventoryTyped<ExpDrain
 				}
 			}
 
-			if(isBurning()) {
-				if(iterator % expConvertIntervalTicks == 0) {
-					if(playerWithExp != null && fluidTank.getFluidAmount() + expConvertAmount <= fluidTank.getCapacity()) {
-						if(fluidTank.fillInternal(new FluidStack(ModFluids.EXP, expConvertAmount), true) > 0) {
-							ExpUtils.decreaseExp(playerWithExp, expConvertAmount);
-						}
+			if(isBurning() && isConvertTick()) {
+				if(playerWithExp != null && fluidTank.getFluidAmount() + expConvertAmount <= fluidTank.getCapacity()) {
+					if(fluidTank.fillInternal(new FluidStack(ModFluids.EXP, expConvertAmount), true) > 0) {
+						ExpUtils.decreaseExp(playerWithExp, expConvertAmount);
 					}
 				}
 			}
