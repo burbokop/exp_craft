@@ -1,12 +1,14 @@
 package com.example.examplemod.blocks
 
 import com.example.examplemod.ExampleMod
-import net.minecraft.block.Block
+import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{Item, ItemBlock}
 
+
 class BlockBase(material: Material, name: String) extends Block(material) {
+
 	setUnlocalizedName(name)
 	setRegistryName(name)
 
@@ -15,5 +17,5 @@ class BlockBase(material: Material, name: String) extends Block(material) {
 	override def setCreativeTab(tab: CreativeTabs): BlockBase = { super.setCreativeTab(tab); this; }
 
 	// TODO - WILL BE REMOVED WHEN I UNDERSTAND HOW TO DISABLE CREATIVE TABS FOR SPECIFIC BLOCK
-	setCreativeTab(CreativeTabs.INVENTORY)
+	//setCreativeTab(CreativeTabs.INVENTORY)
 }

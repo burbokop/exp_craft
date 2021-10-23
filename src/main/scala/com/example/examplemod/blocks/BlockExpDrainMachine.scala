@@ -4,7 +4,7 @@ import com.example.examplemod.ExampleMod
 import com.example.examplemod.blocks.BlockExpDrainMachine.{BURNING, FACING}
 import com.example.examplemod.entities.{TileEntityBase, TileEntityExpDrainMachine, TileEntityInventory}
 import com.example.examplemod.handlers.GuiHandler
-import net.minecraft.block.BlockHorizontal
+import net.minecraft.block.{BlockHorizontal, SoundType}
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.{IProperty, PropertyBool, PropertyDirection}
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
@@ -15,8 +15,6 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.{EnumBlockRenderType, EnumFacing, EnumHand, Mirror, Rotation}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
 
 import java.util.Random;
 
@@ -43,6 +41,10 @@ object BlockExpDrainMachine {
 class BlockExpDrainMachine(name: String)
 	extends BlockTileEntity[TileEntityExpDrainMachine](Material.ROCK, name) {
 
+	setHardness(3f)
+	setResistance(3f)
+	setHarvestLevel("pickaxe", 0)
+	setSoundType(SoundType.STONE)
 	setDefaultState(
 		blockState.getBaseState
 			.withProperty(FACING, EnumFacing.NORTH)
