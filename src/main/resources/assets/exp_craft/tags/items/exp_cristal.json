@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "exp_craft:iron_exp_cristal",
+    "exp_craft:gold_exp_cristal",
+    "exp_craft:blazer_exp_cristal",
+    "exp_craft:chorus_exp_cristal"
+  ]
+}

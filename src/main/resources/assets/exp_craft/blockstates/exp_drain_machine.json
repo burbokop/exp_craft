@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "burning=false,facing=north": { "model": "exp_craft:exp_drain_machine" },
+    "burning=false,facing=east": { "model": "exp_craft:exp_drain_machine", "y": 90 },
+    "burning=false,facing=south": { "model": "exp_craft:exp_drain_machine", "y": 180 },
+    "burning=false,facing=west": { "model": "exp_craft:exp_drain_machine", "y": 270 },
+    "burning=true,facing=north": { "model": "exp_craft:lit_exp_drain_machine" },
+    "burning=true,facing=east": { "model": "exp_craft:lit_exp_drain_machine", "y": 90 },
+    "burning=true,facing=south": { "model": "exp_craft:lit_exp_drain_machine", "y": 180 },
+    "burning=true,facing=west": { "model": "exp_craft:lit_exp_drain_machine", "y":270  }
+  }
+}

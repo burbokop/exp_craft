@@ -1,15 +1,15 @@
 [
 	{
-  		"modid": "examplemod",
-  		"name": "Example Mod",
-		"description": "Example placeholder mod.",
+  		"modid": "exp_craft",
+  		"name": "Exp Craft",
+		"description": "Exp Craft.",
   		"version": "0.0.1",
   		"mcversion": "1.12.2",
   		"url": "",
   		"updateUrl": "",
-  		"authorList": ["ExampleDude"],
-  		"credits": "The Forge and FML guys, for making this example",
-  		"logoFile": "",
+  		"authorList": ["burbokop"],
+  		"credits": "The Forge and FML guys for creating forge",
+  		"logoFile": "./assets/exp_craft/textures/items/gold_exp_cristal.png",
   		"screenshots": [],
   		"dependencies": []
 	}
