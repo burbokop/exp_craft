@@ -5,10 +5,10 @@ import net.minecraftforge.registries.IForgeRegistry
 import org.burbokop.exp_craft.ExpCraftMod
 
 object ModItems {
-	val IRON_EXP_CRISTAL = new ItemBase("iron_exp_cristal").setCreativeTab(ExpCraftMod.CREATIVE_TAB)
-	val GOLD_EXP_CRISTAL = new ItemBase("gold_exp_cristal").setCreativeTab(ExpCraftMod.CREATIVE_TAB)
-	val BLAZER_EXP_CRISTAL = new ItemBase("blazer_exp_cristal").setCreativeTab(ExpCraftMod.CREATIVE_TAB)
-	val CHORUS_EXP_CRISTAL = new ItemBase("chorus_exp_cristal").setCreativeTab(ExpCraftMod.CREATIVE_TAB)
+	val IRON_EXP_CRISTAL = new ItemExpCristal("iron_exp_cristal", 8).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
+	val GOLD_EXP_CRISTAL = new ItemExpCristal("gold_exp_cristal", 20).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
+	val BLAZER_EXP_CRISTAL = new ItemExpCristal("blazer_exp_cristal", 50).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
+	val CHORUS_EXP_CRISTAL = new ItemExpCristal("chorus_exp_cristal", 80).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 
 	def register(registry: IForgeRegistry[Item]) {
 		registry.registerAll(
