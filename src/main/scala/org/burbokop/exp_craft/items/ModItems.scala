@@ -7,7 +7,7 @@ import org.burbokop.exp_craft.ExpCraftMod
 object ModItems {
 	val IRON_EXP_CRISTAL = new ItemExpCristal("iron_exp_cristal", 8).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 	val GOLD_EXP_CRISTAL = new ItemExpCristal("gold_exp_cristal", 20).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
-	val BLAZER_EXP_CRISTAL = new ItemExpCristal("blazer_exp_cristal", 50).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
+	val BLAZER_EXP_CRISTAL = new ItemExpCristal("blaze_exp_cristal", 50).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 	val CHORUS_EXP_CRISTAL = new ItemExpCristal("chorus_exp_cristal", 80).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 	val EXP_TANK = new ItemBase("exp_tank").setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 

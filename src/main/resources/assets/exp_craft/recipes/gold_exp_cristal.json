@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "ASA",
+    " A "
+  ],
+  "key": {
+    "S": { "item": "minecraft:diamond" },
+    "A": [
+      { "item": "minecraft:gold_ingot" }
+    ]
+  },
+  "result": {
+    "item": "exp_craft:gold_exp_cristal",
+    "data": 0
+  }
+}

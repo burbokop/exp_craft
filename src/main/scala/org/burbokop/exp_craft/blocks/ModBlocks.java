@@ -9,14 +9,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModBlocks {
-	public static final BlockOre iiiOre = new BlockOre("ore_iii").setCreativeTab(ExpCraftMod.CREATIVE_TAB);
+	//public static final BlockOre iiiOre = new BlockOre("ore_iii").setCreativeTab(ExpCraftMod.CREATIVE_TAB);
 	public static final BlockFluidBase EXP_BLOCK = new BlockFluidBase(ModFluids.EXP(), ModMaterials.EXP).setDensity(1);
 	
 	public static final BlockExpDrainMachine EXP_DRAIN_MACHINE_BLOCK = (BlockExpDrainMachine) new BlockExpDrainMachine("exp_drain_machine").setCreativeTab(ExpCraftMod.CREATIVE_TAB);
 	
 	public static void register(IForgeRegistry<Block> registry) {
 		registry.registerAll(
-				iiiOre,
+				//iiiOre,
 				EXP_BLOCK,
 				EXP_DRAIN_MACHINE_BLOCK
 		);
@@ -24,14 +24,16 @@ public class ModBlocks {
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
 		registry.registerAll(
-				iiiOre.createItemBlock(),
+				//iiiOre.createItemBlock(),
 				EXP_BLOCK.createItemBlock(),
 				EXP_DRAIN_MACHINE_BLOCK.createItemBlock()
 		);
 	}
 
 	public static void registerModels() {
-		iiiOre.registerItemModel(Item.getItemFromBlock(iiiOre));
+		System.out.println("EXP_BLOCK: " + EXP_BLOCK.getRegistryName());
+		System.out.println("Item.getItemFromBlock(EXP_BLOCK): " + Item.getItemFromBlock(EXP_BLOCK).getRegistryName());
+		//iiiOre.registerItemModel(Item.getItemFromBlock(iiiOre));
 		EXP_BLOCK.registerItemModel(Item.getItemFromBlock(EXP_BLOCK));
 		EXP_DRAIN_MACHINE_BLOCK.registerItemModel(Item.getItemFromBlock(EXP_DRAIN_MACHINE_BLOCK));
 		

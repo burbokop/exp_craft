@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ASA",
+    "AAA"
+  ],
+  "key": {
+    "S": { "item": "minecraft:glass" },
+    "A": [
+      { "item": "minecraft:iron_ingot" }
+    ]
+  },
+  "result": {
+    "item": "exp_craft:exp_tank",
+    "data": 0
+  }
+}
