@@ -2,7 +2,7 @@ package org.burbokop.exp_craft.handlers;
 
 import org.burbokop.exp_craft.containers.ExpDrainMachineContainer;
 import org.burbokop.exp_craft.entities.TileEntityExpDrainMachine;
-import org.burbokop.exp_craft.gui.ExpDrainMachineGui;
+import org.burbokop.exp_craft.gui.GuiExpDrainMachine;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +41,7 @@ public class GuiHandler implements IGuiHandler {
         if (tileEntity != null) {
             if (ID == GuiEnum.EXP_DRAIN_MACHINE.ordinal()) {
                 try {
-					return new ExpDrainMachineGui(player.inventory, (TileEntityExpDrainMachine) tileEntity);
+					return new GuiExpDrainMachine(player.inventory, (TileEntityExpDrainMachine) tileEntity);
 				} catch (PlayerSlotsTemplate.InvalidSlotsSequence e) {
 					e.printStackTrace();
 				}

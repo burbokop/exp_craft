@@ -21,6 +21,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TankWidget {
 	public static void draw(IFluidTank tank, int ax, int ay, int aw, int ah, int xPos, int yPos, double zLevel) {
+		if (tank == null || tank.getCapacity() <= 0) {
+			return;
+		}
+		FluidStack contents = tank.getFluid();
+		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
+			Fluid fluid = contents.getFluid();
+			if (fluid != null) {
+				ResourceLocation fluidStill = fluid.getStill();
+				int fluidColor = fluid.getColor(contents);
+				double scale = (double) contents.amount / (double) tank.getCapacity();
+				WidgetAnimation.draw(fluidStill, ax, ay, aw, ah, xPos, yPos, zLevel, fluidColor, scale);
+			}
+		}
+	}
+
+	@Deprecated
+	public static void draw2(IFluidTank tank, int ax, int ay, int aw, int ah, int xPos, int yPos, double zLevel) {
 		GlStateManager.disableBlend();
 		if (tank == null || tank.getCapacity() <= 0) {
 			return;
@@ -34,8 +51,11 @@ public class TankWidget {
 			if (fluid != null) {
 				TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
 				ResourceLocation fluidStill = fluid.getStill();
+				//exp_craft:blocks/exp_still
+
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
+					System.out.println("fluidStill.toString(): " + fluidStill.toString());
 					fluidStillSprite = textureMapBlocks.getTextureExtry(fluidStill.toString());
 				}
 				if (fluidStillSprite == null) {
@@ -53,7 +73,7 @@ public class TankWidget {
 				}
 
 				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-				setGLColorFromInt(fluidColor);
+				WidgetAnimation.setGLColorFromInt(fluidColor);
 
 				final int xTileCount = aw / 16;
 				final int xRemainder = aw - xTileCount * 16;
@@ -72,7 +92,7 @@ public class TankWidget {
 							int maskTop = 16 - height;
 							int maskRight = 16 - width;
 
-							drawFluidTexture(x + xPos, y + yPos, fluidStillSprite, maskTop, maskRight, zLevel);
+							WidgetAnimation.drawTexture(x + xPos, y + yPos, fluidStillSprite, maskTop, maskRight, zLevel);
 						}
 					}
 				}
@@ -80,30 +100,4 @@ public class TankWidget {
 		}
 		GlStateManager.color(1, 1, 1, 1);
 	}
-	
-	private static void setGLColorFromInt(int color) {
-		float red = (color >> 16 & 0xFF) / 255.0F;
-		float green = (color >> 8 & 0xFF) / 255.0F;
-		float blue = (color & 0xFF) / 255.0F;
-
-		GlStateManager.color(red, green, blue, 1.0F);
-	}
-
-	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
-		double uMin = textureSprite.getMinU();
-		double uMax = textureSprite.getMaxU();
-		double vMin = textureSprite.getMinV();
-		double vMax = textureSprite.getMaxV();
-		uMax = uMax - maskRight / 16.0 * (uMax - uMin);
-		vMax = vMax - maskTop / 16.0 * (vMax - vMin);
-
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
-		buffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
-		buffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
-		buffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
-		tessellator.draw();
-	}	
 }

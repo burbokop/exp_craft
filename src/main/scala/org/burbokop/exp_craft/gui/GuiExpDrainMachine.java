@@ -8,6 +8,7 @@ import org.burbokop.exp_craft.ExpCraftMod;
 import org.burbokop.exp_craft.utils.PlayerSlotsTemplate;
 import org.burbokop.exp_craft.utils.PointInRectDetector;
 import org.burbokop.exp_craft.utils.TankWidget;
+import org.burbokop.exp_craft.utils.WidgetAnimation;
 import org.lwjgl.util.Rectangle;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -22,9 +23,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class ExpDrainMachineGui extends GuiContainer {
+public class GuiExpDrainMachine extends GuiContainer {
 
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExpCraftMod.MOD_ID + ":textures/gui/gui_exp_drain_machine.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExpCraftMod.MOD_ID + ":textures/gui/exp_drain_machine.png");
+	public static final ResourceLocation EXP_SHARD_TEXTURE = new ResourceLocation(ExpCraftMod.MOD_ID + ":blocks/exp_shard");
+
+	//exp_craft:blocks/exp_still
+
 	private static final Point2i BACKGROUND_SIZE = new Point2i(176, 166);
 
 	private static final Rectangle TANK_RECT = new Rectangle(100, 26, 12, 47);
@@ -32,7 +37,7 @@ public class ExpDrainMachineGui extends GuiContainer {
 	private TileEntityExpDrainMachine tileEntity;
 	private InventoryPlayer player;
 
-	public ExpDrainMachineGui(InventoryPlayer player, TileEntityExpDrainMachine tileEntity) throws PlayerSlotsTemplate.InvalidSlotsSequence {
+	public GuiExpDrainMachine(InventoryPlayer player, TileEntityExpDrainMachine tileEntity) throws PlayerSlotsTemplate.InvalidSlotsSequence {
 		super(new ExpDrainMachineContainer(player, tileEntity));
 		this.player = player;
 		this.tileEntity = tileEntity;		
@@ -129,6 +134,9 @@ public class ExpDrainMachineGui extends GuiContainer {
 				.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 
 		drawFluid(fluidTank, this.guiLeft + TANK_RECT.getX(), this.guiTop + TANK_RECT.getY(), TANK_RECT.getWidth(), TANK_RECT.getHeight(), true);
+
+		WidgetAnimation.draw(EXP_SHARD_TEXTURE, this.guiLeft + 50, this.guiTop + 40, 16, 16, 0, 0, zLevel, -1, 1);
+		this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
 	}
 
 

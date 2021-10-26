@@ -1,8 +1,11 @@
 package org.burbokop.exp_craft;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -24,6 +27,7 @@ import org.burbokop.exp_craft.blocks.ModBlocks;
 import org.burbokop.exp_craft.enchantments.ModEnchantments;
 import org.burbokop.exp_craft.entities.ModTileEntities;
 import org.burbokop.exp_craft.fluids.ModFluids;
+import org.burbokop.exp_craft.gui.GuiExpDrainMachine;
 import org.burbokop.exp_craft.handlers.GuiHandler;
 import org.burbokop.exp_craft.items.ModItems;
 import org.burbokop.exp_craft.network.ModNetwork;
@@ -75,6 +79,11 @@ public class ExpCraftMod {
         }
 
         @SubscribeEvent
+        public static void stitchTextures(TextureStitchEvent event) {
+            proxy.registerSprite(event.getMap(), GuiExpDrainMachine.EXP_SHARD_TEXTURE);
+        }
+
+        @SubscribeEvent
         public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
             ModReceipts.register(event.getRegistry());
         }
@@ -105,6 +114,8 @@ public class ExpCraftMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)  {
+        //proxy.registerSprite(GuiExpDrainMachine.EXP_SHARD_TEXTURE);
+
         NetworkRegistry.INSTANCE.registerGuiHandler(ExpCraftMod.instance, new GuiHandler());
 
 

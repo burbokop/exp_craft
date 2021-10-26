@@ -15,5 +15,5 @@ class InventoryCraftingToCollections(inv: InventoryCrafting) {
 object InventoryCraftingToCollections {
   case class Slot(index: Int, stack: ItemStack)
 
-  implicit def apply(inv: InventoryCrafting) = new InventoryCraftingToCollections(inv)
+  implicit def inventoryCraftingToCollections(inv: InventoryCrafting) = new InventoryCraftingToCollections(inv)
 }
