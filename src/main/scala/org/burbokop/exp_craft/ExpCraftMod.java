@@ -2,6 +2,7 @@ package org.burbokop.exp_craft;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -27,6 +28,7 @@ import org.burbokop.exp_craft.handlers.GuiHandler;
 import org.burbokop.exp_craft.items.ModItems;
 import org.burbokop.exp_craft.network.ModNetwork;
 import org.burbokop.exp_craft.proxy.CommonProxy;
+import org.burbokop.exp_craft.receipts.ModReceipts;
 
 @Mod(modid = ExpCraftMod.MOD_ID, name = ExpCraftMod.NAME, version = ExpCraftMod.VERSION, acceptedMinecraftVersions = ExpCraftMod.MC_VERSION)
 public class ExpCraftMod {
@@ -70,6 +72,11 @@ public class ExpCraftMod {
         public static void registerModels(ModelRegistryEvent event) {
             ModItems.registerModels();
             ModBlocks.registerModels();
+        }
+
+        @SubscribeEvent
+        public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+            ModReceipts.register(event.getRegistry());
         }
     }
 
