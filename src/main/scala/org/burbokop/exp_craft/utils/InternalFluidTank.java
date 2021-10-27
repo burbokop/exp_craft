@@ -26,19 +26,30 @@ public class InternalFluidTank extends FluidTank {
       this.inputSides = inputSides;
       this.outputSides = outputSides;
     }
-    
+
+    @Override
     public boolean canFillFluidType(FluidStack fluid) {
       return (fluid != null && acceptsFluid(fluid.getFluid()));
     }
-    
+
+    @Override
     public boolean canDrainFluidType(FluidStack fluid) {
       return (fluid != null && acceptsFluid(fluid.getFluid()));
     }
-    
+
     public boolean acceptsFluid(Fluid fluid) {
       return this.acceptedFluids.apply(fluid);
     }
-    
+
+    @Override
+    public IFluidTankProperties[] getTankProperties() {
+        IFluidTankProperties[] props = new IFluidTankProperties[EnumFacing.values().length];
+        for(int i = 0; i < EnumFacing.values().length; ++i) {
+            props[i] = getTankProperties(EnumFacing.values()[i]);
+        }
+        return  props;
+    }
+
     IFluidTankProperties getTankProperties(final EnumFacing side) {
       assert side == null || this.inputSides.contains(side) || this.outputSides.contains(side);
       return new IFluidTankProperties() {
@@ -71,11 +82,14 @@ public class InternalFluidTank extends FluidTank {
           }
         };
     }
-    
+
+    @Override
+    public boolean canFill() { return false; }
+
     public boolean canFill(EnumFacing side) {
       return this.inputSides.contains(side);
     }
-    
+
     public boolean canDrain(EnumFacing side) {
       return this.outputSides.contains(side);
     }

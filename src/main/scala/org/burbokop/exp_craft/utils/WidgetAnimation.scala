@@ -1,29 +1,23 @@
 package org.burbokop.exp_craft.utils
 
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.{BufferBuilder, GlStateManager, Tessellator}
-import net.minecraft.client.renderer.texture.{TextureAtlasSprite, TextureManager, TextureMap}
+import net.minecraft.client.renderer.{GlStateManager, Tessellator}
+import net.minecraft.client.renderer.texture.{TextureAtlasSprite, TextureMap}
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidTank}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
+@SideOnly(Side.CLIENT)
 object WidgetAnimation {
   def draw(texture: ResourceLocation, ax: Int, ay: Int, aw: Int, ah: Int, xPos: Int, yPos: Int, zLevel: Double, color: Int, scale: Double): Unit = {
-
     GlStateManager.disableBlend()
     if (texture == null) return
     val minecraft = Minecraft.getMinecraft
     val textureManager = minecraft.getTextureManager
-
     val textureMapBlocks = minecraft.getTextureMapBlocks
-    //exp_craft:blocks/exp_still
     var fluidStillSprite: TextureAtlasSprite = null
-
     fluidStillSprite = textureMapBlocks.getTextureExtry(texture.toString)
-    System.out.println("texture: " + texture.toString + ", scale: " + scale + ", fluidColor: " + color + ", fluidStillSprite: " + fluidStillSprite)
-
     if (fluidStillSprite == null) fluidStillSprite = textureMapBlocks.getMissingSprite
-
     var scaledAmount = scale * ah
     if (scale > 0 && scaledAmount < 1) scaledAmount = 1
     if (scaledAmount > ah) scaledAmount = ah

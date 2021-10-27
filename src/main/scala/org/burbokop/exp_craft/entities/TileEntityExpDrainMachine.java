@@ -3,14 +3,21 @@ package org.burbokop.exp_craft.entities;
 
 import java.util.List;
 
+import buildcraft.api.transport.IWireManager;
+import buildcraft.api.transport.pipe.IPipe;
+import buildcraft.api.transport.pipe.IPipeHolder;
+import buildcraft.api.transport.pipe.PipeApi;
+import buildcraft.api.transport.pipe.PipeEvent;
+import buildcraft.api.transport.pluggable.PipePluggable;
 import com.google.common.base.Predicate;
+import com.mojang.authlib.GameProfile;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import org.burbokop.exp_craft.blocks.BlockExpDrainMachine;
 import org.burbokop.exp_craft.fluids.ModFluids;
-import org.burbokop.exp_craft.utils.BurningUtils;
-import org.burbokop.exp_craft.utils.ExpUtils;
-import org.burbokop.exp_craft.utils.InternalFluidTank;
-import org.burbokop.exp_craft.utils.PacketBufferMod;
+import org.burbokop.exp_craft.utils.*;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -28,9 +35,9 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import java.util.ArrayList;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
-
 
 public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEntityExpDrainMachine.EnumSlot> implements ITickable {
 	private int expConvertAmount;
@@ -38,6 +45,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 	private FluidTank fluidTank;
 	private int burnTime;
 	private int totalBurnTime;
+	private boolean draining = false;
 
 	public enum EnumSlot {
 		FUEL_SLOT,
@@ -54,11 +62,11 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 				Arrays.asList(new Fluid[]{ModFluids.EXP()})
 		).seq());
 
-		this.fluidTank = new InternalFluidTank("fluidTank", new ArrayList<>(), Arrays.asList(EnumFacing.VALUES), expPredicate, 8000);
+		this.fluidTank = new FluidTankConsumable(ModFluids.EXP(), 0, 1000);
 		this.fluidTank.setTileEntity(this);
 
 		this.expConvertAmount = 1;
-		this.expConvertIntervalTicks = 1; // 0.05 sec
+		this.expConvertIntervalTicks = 20; // 1 sec
 	}
 
 	public TileEntityExpDrainMachine(float expConvertIntervalSec, int expConvertAmount) {
@@ -79,6 +87,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		this.expConvertAmount = compound.getInteger("ExpConvertAmount");
 		this.expConvertIntervalTicks = compound.getInteger("ExpConvertIntervalTicks");
 		this.fluidTank.readFromNBT(compound.getCompoundTag("FluidTank"));
+		this.draining = compound.getBoolean("Draining");
 		//this.lastChangeTime = compound.getLong("LastChangeTime");
 	}
 
@@ -95,6 +104,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		this.fluidTank.writeToNBT(fluidTankCompound);
 		compound.setTag("FluidTank", fluidTankCompound);
 
+		compound.setBoolean("Draining", this.draining);
 		//compound.setLong("LastChangeTime", lastChangeTime);
 		return compound;
 	}
@@ -108,6 +118,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		this.totalBurnTime = buf.readInt();
 		this.expConvertAmount = buf.readInt();
 		this.expConvertIntervalTicks = buf.readInt();
+		this.draining = buf.readBoolean();
 	}
 
 	@Override
@@ -121,6 +132,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		buf.writeInt(this.totalBurnTime);
 		buf.writeInt(this.expConvertAmount);
 		buf.writeInt(this.expConvertIntervalTicks);
+		buf.writeBoolean(this.draining);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -155,7 +167,8 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 	public enum EnumFields {
 		BURN_TIME,
 		TOTAL_BURN_TIME,
-		ITERATOR
+		ITERATOR,
+		DRAINING
 	}
 
 	int iterator = 0;
@@ -168,6 +181,8 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 				return this.totalBurnTime;
 			case ITERATOR:
 				return this.iterator;
+			case DRAINING:
+				return this.draining ? 1 : 0;
 			default:
 				return 0;
 		}
@@ -185,6 +200,9 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 			case ITERATOR:
 				this.iterator = value;
 				break;
+			case DRAINING:
+				this.draining = value != 0;
+				break;
 		}
 	}
 
@@ -196,6 +214,8 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 	public boolean isBurning() {
 		return this.burnTime > 0;
 	}
+
+	public boolean isDraining() { return this.draining; }
 
 	public boolean isConvertTick() {
 		if(expConvertIntervalTicks != 0) {
@@ -233,10 +253,14 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 				}
 			}
 
-			if(isBurning() && isConvertTick()) {
-				if(playerWithExp != null && fluidTank.getFluidAmount() + expConvertAmount <= fluidTank.getCapacity()) {
-					if(fluidTank.fillInternal(new FluidStack(ModFluids.EXP(), expConvertAmount), true) > 0) {
-						ExpUtils.decreaseExp(playerWithExp, expConvertAmount);
+			if(isConvertTick()) {
+				draining = false;
+				if (isBurning()) {
+					if (playerWithExp != null && fluidTank.getFluidAmount() + expConvertAmount <= fluidTank.getCapacity()) {
+						if (fluidTank.fillInternal(new FluidStack(ModFluids.EXP(), expConvertAmount), true) > 0) {
+							ExpUtils.decreaseExp(playerWithExp, expConvertAmount);
+							draining = true;
+						}
 					}
 				}
 			}

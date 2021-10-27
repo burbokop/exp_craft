@@ -28,11 +28,15 @@ import org.burbokop.exp_craft.enchantments.ModEnchantments;
 import org.burbokop.exp_craft.entities.ModTileEntities;
 import org.burbokop.exp_craft.fluids.ModFluids;
 import org.burbokop.exp_craft.gui.GuiExpDrainMachine;
+import org.burbokop.exp_craft.gui.sprites.ModSprites;
 import org.burbokop.exp_craft.handlers.GuiHandler;
 import org.burbokop.exp_craft.items.ModItems;
 import org.burbokop.exp_craft.network.ModNetwork;
 import org.burbokop.exp_craft.proxy.CommonProxy;
 import org.burbokop.exp_craft.receipts.ModReceipts;
+import org.reflections.Reflections;
+
+import java.util.Set;
 
 @Mod(modid = ExpCraftMod.MOD_ID, name = ExpCraftMod.NAME, version = ExpCraftMod.VERSION, acceptedMinecraftVersions = ExpCraftMod.MC_VERSION)
 public class ExpCraftMod {
@@ -80,7 +84,17 @@ public class ExpCraftMod {
 
         @SubscribeEvent
         public static void stitchTextures(TextureStitchEvent event) {
-            proxy.registerSprite(event.getMap(), GuiExpDrainMachine.EXP_SHARD_TEXTURE);
+            ModSprites.register(proxy, event.getMap());
+
+
+            Reflections reflections = new Reflections("org.burbokop.exp_craft");
+            //val reflections = new Reflection("my.project.prefix")
+
+            Set<Class<?>> classes = reflections.getTypesAnnotatedWith(RegistrableContainer.class);
+            for(Class<?> clazz : classes) {
+                //Set<Fields> fields = reflections.getAllFields(SomeClass.class, withAnnotation(annotation), withTypeAssignableTo(type));
+                //clazz.
+            }
         }
 
         @SubscribeEvent

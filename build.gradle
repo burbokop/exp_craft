@@ -15,6 +15,7 @@ apply plugin: 'scala'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
+apply plugin: 'war'
 
 
 task prepareAssets(type: Copy) {
@@ -71,6 +72,10 @@ repositories {
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
+    maven {
+        name = "Buildcraft maven"
+        url = "https://mod-buildcraft.com/maven"
+    }
     maven { // Мавен, который поддерживает JEI, для резерва.
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
@@ -95,8 +100,12 @@ dependencies {
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
 
+    compile 'org.reflections:reflections:0.9.11'
+
+    providedCompile 'com.mod-buildcraft:buildcraft-api:7.99.24.8'
+
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+    //providedCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
 
     // These dependencies get remapped to your current MCP mappings
     // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'

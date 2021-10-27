@@ -5,9 +5,10 @@ import javax.vecmath.Point2i;
 import org.burbokop.exp_craft.containers.ExpDrainMachineContainer;
 import org.burbokop.exp_craft.entities.TileEntityExpDrainMachine;
 import org.burbokop.exp_craft.ExpCraftMod;
+import org.burbokop.exp_craft.gui.sprites.ModSprites;
 import org.burbokop.exp_craft.utils.PlayerSlotsTemplate;
 import org.burbokop.exp_craft.utils.PointInRectDetector;
-import org.burbokop.exp_craft.utils.TankWidget;
+import org.burbokop.exp_craft.utils.WidgetTank;
 import org.burbokop.exp_craft.utils.WidgetAnimation;
 import org.lwjgl.util.Rectangle;
 
@@ -24,11 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
 public class GuiExpDrainMachine extends GuiContainer {
-
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExpCraftMod.MOD_ID + ":textures/gui/exp_drain_machine.png");
-	public static final ResourceLocation EXP_SHARD_TEXTURE = new ResourceLocation(ExpCraftMod.MOD_ID + ":blocks/exp_shard");
-
-	//exp_craft:blocks/exp_still
 
 	private static final Point2i BACKGROUND_SIZE = new Point2i(176, 166);
 
@@ -43,11 +40,8 @@ public class GuiExpDrainMachine extends GuiContainer {
 		this.tileEntity = tileEntity;		
 	}
 
-
-
 	@Override
 	public boolean doesGuiPauseGame() { return false; }
-
 
 	public String getTileEntityDisplayName() {
 		if(tileEntity != null) {
@@ -135,8 +129,10 @@ public class GuiExpDrainMachine extends GuiContainer {
 
 		drawFluid(fluidTank, this.guiLeft + TANK_RECT.getX(), this.guiTop + TANK_RECT.getY(), TANK_RECT.getWidth(), TANK_RECT.getHeight(), true);
 
-		WidgetAnimation.draw(EXP_SHARD_TEXTURE, this.guiLeft + 50, this.guiTop + 40, 16, 16, 0, 0, zLevel, -1, 1);
-		this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+		if(tileEntity.isDraining()) {
+			WidgetAnimation.draw(ModSprites.EXP_SHARD(), this.guiLeft + 72, this.guiTop + 24, 16, 16, 0, 0, zLevel, -1, 1);
+			this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
+		}
 	}
 
 
@@ -155,7 +151,7 @@ public class GuiExpDrainMachine extends GuiContainer {
 			return;
 		}
 
-		TankWidget.draw(fluidTank, left, top, width, height, 0, 0, zLevel);
+		WidgetTank.draw(fluidTank, left, top, width, height, 0, 0, zLevel);
 
 		this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
 		this.drawTexturedModalRect(left, top, 176, 55, width, height);		
