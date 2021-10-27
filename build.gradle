@@ -72,13 +72,17 @@ repositories {
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
+    maven { // Мавен, который поддерживает JEI, для резерва.
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
+    }
     maven {
         name = "Buildcraft maven"
         url = "https://mod-buildcraft.com/maven"
     }
-    maven { // Мавен, который поддерживает JEI, для резерва.
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
+    maven {
+        name = "ic2"
+        url = "http://maven.ic2.player.to/"
     }
 }
 
@@ -101,6 +105,8 @@ dependencies {
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
 
     compile 'org.reflections:reflections:0.9.11'
+
+    providedCompile 'net.industrial-craft:industrialcraft-2:2.8.221-ex112:api'
 
     providedCompile 'com.mod-buildcraft:buildcraft-api:7.99.24.8'
 

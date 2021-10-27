@@ -2,6 +2,7 @@ package org.burbokop.exp_craft.containers;
 
 import org.burbokop.exp_craft.containers.slots.BucketInputSlot;
 import org.burbokop.exp_craft.containers.slots.BucketOutputSlot;
+import org.burbokop.exp_craft.containers.slots.SlotPredicate;
 import org.burbokop.exp_craft.containers.slots.SolidFuelSlot;
 import org.burbokop.exp_craft.entities.TileEntityExpDrainMachine;
 import org.burbokop.exp_craft.utils.FieldsChangeDetector;
@@ -33,9 +34,9 @@ public class ExpDrainMachineContainer extends Container {
 		Assert.assrt(tileEntity != null);
 		this.tileEntity = tileEntity;		
 
-		addSlotToContainer(new SolidFuelSlot(tileEntity, TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
-		addSlotToContainer(new BucketInputSlot(tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
-		addSlotToContainer(new BucketOutputSlot(tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));
+		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.predicate(), 64, tileEntity, TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
+		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.predicate(), 1, tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
+		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.predicate(), 0, tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));
 		PLAYER_SLOTS.addSlots(player, new PlayerSlotsTemplate.SlotsList() {
 			@Override
 			public void addSlot(Slot slot) { addSlotToContainer(slot); }
@@ -68,14 +69,6 @@ public class ExpDrainMachineContainer extends Container {
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return this.tileEntity.isUsableByPlayer(playerIn);
 	}
-
-
-	@Override
-	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
-		player.sendMessage(new TextComponentString("clicked: " + slotId));
-		return super.slotClick(slotId, dragType, clickTypeIn, player);
-	}
-
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {

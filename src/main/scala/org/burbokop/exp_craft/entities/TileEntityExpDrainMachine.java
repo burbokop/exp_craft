@@ -3,18 +3,9 @@ package org.burbokop.exp_craft.entities;
 
 import java.util.List;
 
-import buildcraft.api.transport.IWireManager;
-import buildcraft.api.transport.pipe.IPipe;
-import buildcraft.api.transport.pipe.IPipeHolder;
-import buildcraft.api.transport.pipe.PipeApi;
-import buildcraft.api.transport.pipe.PipeEvent;
-import buildcraft.api.transport.pluggable.PipePluggable;
 import com.google.common.base.Predicate;
-import com.mojang.authlib.GameProfile;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import org.burbokop.exp_craft.blocks.BlockExpDrainMachine;
 import org.burbokop.exp_craft.fluids.ModFluids;
 import org.burbokop.exp_craft.utils.*;
@@ -35,7 +26,6 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
@@ -47,10 +37,17 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 	private int totalBurnTime;
 	private boolean draining = false;
 
-	public enum EnumSlot {
-		FUEL_SLOT,
-		BUCKET_INPUT_SLOT,
-		BUCKET_OUTPUT_SLOT
+	public enum EnumSlot implements PredicateProvider<ItemStack> {
+		FUEL_SLOT {
+			@Override public Predicate<ItemStack> predicate() { return TileEntityFurnace::isItemFuel; }
+		},
+		BUCKET_INPUT_SLOT {
+			@Override public Predicate<ItemStack> predicate() { return new FluidInputItemStackPredicate(ModFluids.EXP()); }
+		},
+		BUCKET_OUTPUT_SLOT;
+
+		@Override
+		public Predicate<ItemStack> predicate() { return input -> false; }
 	}
 
 
@@ -66,7 +63,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		this.fluidTank.setTileEntity(this);
 
 		this.expConvertAmount = 1;
-		this.expConvertIntervalTicks = 20; // 1 sec
+		this.expConvertIntervalTicks = 1;//20; // 1 sec
 	}
 
 	public TileEntityExpDrainMachine(float expConvertIntervalSec, int expConvertAmount) {
@@ -154,21 +151,15 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		if(index == EnumSlot.FUEL_SLOT.ordinal()) {
-			return TileEntityFurnace.isItemFuel(stack);
-		} else if(index == EnumSlot.BUCKET_INPUT_SLOT.ordinal()) {
-			return stack.getItem() == Items.BUCKET;
-		} else if(index == EnumSlot.BUCKET_OUTPUT_SLOT.ordinal()) {
-			return false;
-		}
-		return false;
+		return EnumSlot.values()[index].predicate().apply(stack);
 	}
 
 	public enum EnumFields {
 		BURN_TIME,
 		TOTAL_BURN_TIME,
 		ITERATOR,
-		DRAINING
+		DRAINING,
+		FLUID_AMOUNT
 	}
 
 	int iterator = 0;
@@ -183,6 +174,8 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 				return this.iterator;
 			case DRAINING:
 				return this.draining ? 1 : 0;
+			case FLUID_AMOUNT:
+				return this.fluidTank.getFluidAmount();
 			default:
 				return 0;
 		}
@@ -266,13 +259,27 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 			}
 
 			ItemStack bucketInputSlot = getStackInSlot(EnumSlot.BUCKET_INPUT_SLOT);
-			if(
-					fluidTank.getFluidAmount() >= 1000 &&
-							bucketInputSlot.getCount() > 0 &&
-							getStackInSlot(EnumSlot.BUCKET_OUTPUT_SLOT).getCount() == 0
-			) {
-				setInventorySlotContents(EnumSlot.BUCKET_OUTPUT_SLOT, FluidUtil.getFilledBucket(fluidTank.drain(1000, true)));
-				bucketInputSlot.setCount(bucketInputSlot.getCount() - 1);
+			if(bucketInputSlot.getCount() > 0) {
+				if (
+						bucketInputSlot.getItem() == Items.BUCKET &&
+								fluidTank.getFluidAmount() >= 1000 &&
+								getStackInSlot(EnumSlot.BUCKET_OUTPUT_SLOT).isEmpty()
+				) {
+					setInventorySlotContents(EnumSlot.BUCKET_OUTPUT_SLOT, FluidUtil.getFilledBucket(fluidTank.drain(1000, true)));
+					bucketInputSlot.setCount(bucketInputSlot.getCount() - 1);
+				} else if (
+						FluidUtil.getFluidHandler(bucketInputSlot) != null &&
+								fluidTank.getFluidAmount() > 0
+				) {
+					IFluidHandlerItem handler = FluidUtil.getFluidHandler(bucketInputSlot);
+					int fillAmount = handler.fill(fluidTank.drain(fluidTank.getFluidAmount(), false), true);
+					if (fillAmount > 0) {
+						fluidTank.drain(fillAmount, true);
+					} else if(getStackInSlot(EnumSlot.BUCKET_OUTPUT_SLOT).isEmpty()) {
+						setInventorySlotContents(EnumSlot.BUCKET_OUTPUT_SLOT, bucketInputSlot);
+						setInventorySlotContents(EnumSlot.BUCKET_INPUT_SLOT, ItemStack.EMPTY);
+					}
+				}
 			}
 
 			if(iterator % 10 == 0) {

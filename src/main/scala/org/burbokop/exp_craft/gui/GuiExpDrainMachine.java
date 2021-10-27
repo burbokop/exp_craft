@@ -2,14 +2,14 @@ package org.burbokop.exp_craft.gui;
 
 import javax.vecmath.Point2i;
 
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import org.burbokop.exp_craft.containers.ExpDrainMachineContainer;
 import org.burbokop.exp_craft.entities.TileEntityExpDrainMachine;
 import org.burbokop.exp_craft.ExpCraftMod;
 import org.burbokop.exp_craft.gui.sprites.ModSprites;
-import org.burbokop.exp_craft.utils.PlayerSlotsTemplate;
-import org.burbokop.exp_craft.utils.PointInRectDetector;
-import org.burbokop.exp_craft.utils.WidgetTank;
-import org.burbokop.exp_craft.utils.WidgetAnimation;
+import org.burbokop.exp_craft.utils.*;
 import org.lwjgl.util.Rectangle;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -22,6 +22,9 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiExpDrainMachine extends GuiContainer {
@@ -37,7 +40,7 @@ public class GuiExpDrainMachine extends GuiContainer {
 	public GuiExpDrainMachine(InventoryPlayer player, TileEntityExpDrainMachine tileEntity) throws PlayerSlotsTemplate.InvalidSlotsSequence {
 		super(new ExpDrainMachineContainer(player, tileEntity));
 		this.player = player;
-		this.tileEntity = tileEntity;		
+		this.tileEntity = tileEntity;
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class GuiExpDrainMachine extends GuiContainer {
 
 	public String getTileEntityDisplayName() {
 		if(tileEntity != null) {
-			ITextComponent name = tileEntity.getDisplayName();			
+			ITextComponent name = tileEntity.getDisplayName();
 			if(name != null) {
 				return name.getUnformattedText();
 			} else {
@@ -62,53 +65,45 @@ public class GuiExpDrainMachine extends GuiContainer {
 			if(name != null) {
 				return name.getUnformattedText();
 			} else {
-				return "null display name";					
+				return "null display name";
 			}
 		} else {
 			return "null player";
 		}
 	}
 
-	public String getFluidTankInfo() {
-		FluidTank fluidTank = (FluidTank) this.tileEntity
-				.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-		if(fluidTank != null) {
-			FluidStack fluidStack = fluidTank.getFluid();
-			if(fluidStack != null) {
-				return fluidStack.getLocalizedName() + ":" + fluidStack.amount;
-			} else {
-				return "null fluid stack";
-			}
-		} else {
-			return "null fluid tank";
+	protected void renderTankToolTip(FluidTank tank, int x, int y) {
+		this.drawHoveringText(FluidTankImplicits.fluidTankImplicits(tank).javaToolTip(), x, y);
+	}
+
+	@Override
+	protected void renderHoveredToolTip(int mouseX, int mouseY) {
+		super.renderHoveredToolTip(mouseX, mouseY);
+
+		if(isPointInRegion(TANK_RECT.getX(), TANK_RECT.getY(), TANK_RECT.getWidth(), TANK_RECT.getHeight(), mouseX, mouseY)) {
+			FluidTank fluidTank = (FluidTank) this.tileEntity
+					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+
+			this.renderTankToolTip(fluidTank, mouseX, mouseY);
 		}
 	}
 
 	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		String tileEntityName = getTileEntityDisplayName();
 
 		int iterator = this.tileEntity.getField(TileEntityExpDrainMachine.EnumFields.ITERATOR.ordinal());
 
-		fontRenderer.drawString(tileEntityName + ":" + iterator, xSize / 2 - fontRenderer.getStringWidth(tileEntityName) / 2, 6, 4210752);
-		fontRenderer.drawString(getPlayerDisplayName(), 8, ySize - 96 + 2, 4210752);
-
-		if(PointInRectDetector.detect(
-				new Point2i(mouseX, mouseY), 
-				new Point2i(guiLeft, guiTop),
-				TANK_RECT
-				)) {
-			String info = getFluidTankInfo();
-			
-			
-			drawRect(mouseX - guiLeft, mouseY - guiTop - 9, mouseX - guiLeft + fontRenderer.getStringWidth(info), mouseY - guiTop, 0x88000000);
-			fontRenderer.drawString(
-					info, 
-					mouseX - guiLeft, 
-					mouseY - guiTop - 8, 
-					0xff8800
-					);	
-		}        
+		fontRenderer.drawString(tileEntityName, xSize / 2 - fontRenderer.getStringWidth(tileEntityName) / 2, 6, 0x404040);
+		fontRenderer.drawString(getPlayerDisplayName(), 8, ySize - 96 + 2, 0x404040);
 	}
 
 	@Override
@@ -154,7 +149,7 @@ public class GuiExpDrainMachine extends GuiContainer {
 		WidgetTank.draw(fluidTank, left, top, width, height, 0, 0, zLevel);
 
 		this.mc.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-		this.drawTexturedModalRect(left, top, 176, 55, width, height);		
+		this.drawTexturedModalRect(left, top, 176, 55, width, height);
 	}
 
 	private int getBurnLeftScaled(int pixels) {
