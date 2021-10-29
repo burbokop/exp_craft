@@ -11,7 +11,7 @@ object ModItems {
 	val CHORUS_EXP_CRISTAL = new ItemExpCristal("chorus_exp_cristal", 80).setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 	val EXP_TANK = new ItemBase("exp_tank").setCreativeTab(ExpCraftMod.CREATIVE_TAB)
 
-	def register(registry: IForgeRegistry[Item]) {
+	def register(registry: IForgeRegistry[Item]) = {
 		registry.registerAll(
 			IRON_EXP_CRISTAL,
 			GOLD_EXP_CRISTAL,
@@ -21,7 +21,7 @@ object ModItems {
 		)
 	}
 
-	def registerModels() {
+	def registerModels() = {
 		IRON_EXP_CRISTAL.registerItemModel()
 		GOLD_EXP_CRISTAL.registerItemModel()
 		BLAZER_EXP_CRISTAL.registerItemModel()

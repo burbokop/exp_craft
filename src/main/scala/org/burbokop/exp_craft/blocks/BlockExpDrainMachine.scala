@@ -23,7 +23,7 @@ object BlockExpDrainMachine {
 	def FACING = BlockHorizontal.FACING
 	def BURNING = PropertyBool.create("burning")
 
-	def setState(active: Boolean, worldIn: World, pos: BlockPos) {
+	def setState(active: Boolean, worldIn: World, pos: BlockPos) = {
 		val state = worldIn.getBlockState(pos);
 		val tileEntity = Option(worldIn.getTileEntity(pos))
 

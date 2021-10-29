@@ -11,7 +11,7 @@ class MessageUpdateTileEntity(tileEntity: Option[TileEntityBase]) extends IMessa
   private var lastChangeTime: Option[Long] = tileEntity.map(_.getLastChangeTime)
   private var buffer: Option[ByteBuf] = None
 
-  def this() { this(None) }
+  def this() = { this(None) }
 
   override def fromBytes(buf: ByteBuf): Unit = {
     pos = Some(BlockPos.fromLong(buf.readLong))

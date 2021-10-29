@@ -1,11 +1,13 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.19"
     }
 }
         
@@ -16,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
 apply plugin: 'war'
-
+apply plugin: "com.github.maiflai.scalatest"
 
 task prepareAssets(type: Copy) {
     group = 'build'
@@ -86,10 +88,24 @@ repositories {
     }
 }
 
+
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+
+    implementation 'org.scala-lang:scala-library:2.13.5'
+    implementation 'org.scala-lang:scala-reflect:2.13.5'
+    testImplementation 'org.scala-lang.modules:scala-xml_2.13:1.2.0'
+    testImplementation 'org.scalatest:scalatest_2.13:3.2.5'
+    testRuntime 'com.vladsch.flexmark:flexmark-all:0.36.8'
+
+
+    //testCompile 'org.scalatest:scalatest_2.13:3.2.0'
+
+    //testImplementation group: 'org.scalatest', name: 'scalatest_2.11', version: '2.2.2'
+
+
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
 
     //jei_1.12.2-4.16.1.301.jar

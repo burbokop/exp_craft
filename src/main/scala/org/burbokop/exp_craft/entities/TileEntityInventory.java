@@ -73,20 +73,20 @@ public abstract class TileEntityInventory extends TileEntityBase implements IInv
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
 		if (stacks[index] != null) {
-			ItemStack itemstack;
+			ItemStack itemStack;
 
 			if (stacks[index].getCount() <= count) {
-				itemstack = stacks[index];
+				itemStack = stacks[index];
 				stacks[index] = null;
-				return itemstack;
+				return itemStack;
 			} else {
-				itemstack = stacks[index].splitStack(count);
+				itemStack = stacks[index].splitStack(count);
 
 				if (stacks[index].getCount() == 0) {
 					stacks[index] = null;
 				}
 
-				return itemstack;
+				return itemStack;
 			}
 		} else {
 			return null;

@@ -1,8 +1,8 @@
-package org.burbokop.exp_craft.utils
+package org.burbokop.exp_craft.implicits
 
 import net.minecraftforge.fluids.FluidTank
 
-import scala.collection.JavaConverters.seqAsJavaListConverter
+import scala.jdk.CollectionConverters._
 
 class FluidTankImplicits(tank: FluidTank) {
   def toolTip(): List[String] = {

@@ -8,7 +8,7 @@ import org.burbokop.exp_craft.materials.ModMaterials
 import com.google.common.base.Predicate
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fluids.Fluid
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 object ModFluids {

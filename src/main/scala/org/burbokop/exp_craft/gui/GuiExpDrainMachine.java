@@ -2,13 +2,11 @@ package org.burbokop.exp_craft.gui;
 
 import javax.vecmath.Point2i;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import org.burbokop.exp_craft.containers.ExpDrainMachineContainer;
 import org.burbokop.exp_craft.entities.TileEntityExpDrainMachine;
 import org.burbokop.exp_craft.ExpCraftMod;
 import org.burbokop.exp_craft.gui.sprites.ModSprites;
+import org.burbokop.exp_craft.implicits.FluidTankImplicits;
 import org.burbokop.exp_craft.utils.*;
 import org.lwjgl.util.Rectangle;
 
@@ -17,14 +15,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.util.Arrays;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiExpDrainMachine extends GuiContainer {

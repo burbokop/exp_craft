@@ -12,13 +12,13 @@ class MessageRequestUpdateTileEntity() extends IMessage {
   private var pos: BlockPos = null
   private var dimension: Int = 0
 
-  def this(pos: BlockPos, dimension: Int) {
+  def this(pos: BlockPos, dimension: Int) = {
     this()
     this.pos = pos
     this.dimension = dimension
   }
 
-  def this(tileEntity: TileEntity) {
+  def this(tileEntity: TileEntity) = {
     this(tileEntity.getPos, tileEntity.getWorld.provider.getDimension)
   }
 

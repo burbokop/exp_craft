@@ -30,6 +30,7 @@ import org.burbokop.exp_craft.fluids.ModFluids;
 import org.burbokop.exp_craft.gui.GuiExpDrainMachine;
 import org.burbokop.exp_craft.gui.sprites.ModSprites;
 import org.burbokop.exp_craft.handlers.GuiHandler;
+import org.burbokop.exp_craft.implicits.FluidTankPropertiesImplicits;
 import org.burbokop.exp_craft.items.ModItems;
 import org.burbokop.exp_craft.network.ModNetwork;
 import org.burbokop.exp_craft.proxy.CommonProxy;
@@ -129,6 +130,7 @@ public class ExpCraftMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)  {
         //proxy.registerSprite(GuiExpDrainMachine.EXP_SHARD_TEXTURE);
+
 
         NetworkRegistry.INSTANCE.registerGuiHandler(ExpCraftMod.instance, new GuiHandler());
 

@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.None;
+import scala.None$;
 
 public class ExpDrainMachineContainer extends Container {
 
@@ -34,9 +36,9 @@ public class ExpDrainMachineContainer extends Container {
 		Assert.assrt(tileEntity != null);
 		this.tileEntity = tileEntity;		
 
-		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.predicate(), 64, tileEntity, TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.ordinal(), 72, 57));
-		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.predicate(), 1, tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23));
-		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.predicate(), 0, tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59));
+		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.predicate(), tileEntity, TileEntityExpDrainMachine.EnumSlot.FUEL_SLOT.ordinal(), 72, 57, scala.Option.apply(null)));
+		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.predicate(), tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_INPUT_SLOT.ordinal(), 125, 23, scala.Option.apply(null)));
+		addSlotToContainer(new SlotPredicate(TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.predicate(), tileEntity, TileEntityExpDrainMachine.EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), 125, 59, scala.Option.apply(null)));
 		PLAYER_SLOTS.addSlots(player, new PlayerSlotsTemplate.SlotsList() {
 			@Override
 			public void addSlot(Slot slot) { addSlotToContainer(slot); }

@@ -4,7 +4,6 @@ package org.burbokop.exp_craft.entities;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import org.burbokop.exp_craft.blocks.BlockExpDrainMachine;
 import org.burbokop.exp_craft.fluids.ModFluids;
@@ -25,9 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
 
 public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEntityExpDrainMachine.EnumSlot> implements ITickable {
 	private int expConvertAmount;
@@ -55,14 +51,14 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		super(EnumSlot.values().length);
 
 
-		Predicate<Fluid> expPredicate = ModFluids.fluidPredicate(scala.collection.JavaConversions.asScalaBuffer(
-				Arrays.asList(new Fluid[]{ModFluids.EXP()})
-		).seq());
+		//Predicate<Fluid> expPredicate = ModFluids.fluidPredicate(scala.collection.JavaConversions.asScalaBuffer(
+		//		Arrays.asList(new Fluid[]{ModFluids.EXP()})
+		//).seq());
 
 		this.fluidTank = new FluidTankConsumable(ModFluids.EXP(), 0, 1000);
 		this.fluidTank.setTileEntity(this);
 
-		this.expConvertAmount = 1;
+		this.expConvertAmount = 10;
 		this.expConvertIntervalTicks = 1;//20; // 1 sec
 	}
 
@@ -158,8 +154,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 		BURN_TIME,
 		TOTAL_BURN_TIME,
 		ITERATOR,
-		DRAINING,
-		FLUID_AMOUNT
+		DRAINING
 	}
 
 	int iterator = 0;
@@ -174,8 +169,6 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 				return this.iterator;
 			case DRAINING:
 				return this.draining ? 1 : 0;
-			case FLUID_AMOUNT:
-				return this.fluidTank.getFluidAmount();
 			default:
 				return 0;
 		}
@@ -194,7 +187,7 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 				this.iterator = value;
 				break;
 			case DRAINING:
-				this.draining = value != 0;
+				this.draining = value > 0;
 				break;
 		}
 	}
@@ -260,24 +253,28 @@ public class TileEntityExpDrainMachine extends TileEntityInventoryTyped<TileEnti
 
 			ItemStack bucketInputSlot = getStackInSlot(EnumSlot.BUCKET_INPUT_SLOT);
 			if(bucketInputSlot.getCount() > 0) {
-				if (
-						bucketInputSlot.getItem() == Items.BUCKET &&
-								fluidTank.getFluidAmount() >= 1000 &&
-								getStackInSlot(EnumSlot.BUCKET_OUTPUT_SLOT).isEmpty()
-				) {
-					setInventorySlotContents(EnumSlot.BUCKET_OUTPUT_SLOT, FluidUtil.getFilledBucket(fluidTank.drain(1000, true)));
-					bucketInputSlot.setCount(bucketInputSlot.getCount() - 1);
-				} else if (
-						FluidUtil.getFluidHandler(bucketInputSlot) != null &&
-								fluidTank.getFluidAmount() > 0
-				) {
-					IFluidHandlerItem handler = FluidUtil.getFluidHandler(bucketInputSlot);
-					int fillAmount = handler.fill(fluidTank.drain(fluidTank.getFluidAmount(), false), true);
-					if (fillAmount > 0) {
-						fluidTank.drain(fillAmount, true);
-					} else if(getStackInSlot(EnumSlot.BUCKET_OUTPUT_SLOT).isEmpty()) {
-						setInventorySlotContents(EnumSlot.BUCKET_OUTPUT_SLOT, bucketInputSlot);
-						setInventorySlotContents(EnumSlot.BUCKET_INPUT_SLOT, ItemStack.EMPTY);
+				if (bucketInputSlot.getItem() == Items.BUCKET) {
+					if(fluidTank.getFluidAmount() >= 1000 && getStackInSlot(EnumSlot.BUCKET_OUTPUT_SLOT).isEmpty()) {
+						setInventorySlotContents(EnumSlot.BUCKET_OUTPUT_SLOT, FluidUtil.getFilledBucket(fluidTank.drain(1000, true)));
+						bucketInputSlot.setCount(bucketInputSlot.getCount() - 1);
+					}
+				} else if (FluidUtil.getFluidHandler(bucketInputSlot) != null) {
+					if(fluidTank.getFluidAmount() > 0) {
+						if(bucketInputSlot.getCount() > 1) {
+							if(fluidTank.getFluidAmount() >= 1000) {
+								boolean yes = InventoryUtil.tryMergeFluidItem(this, EnumSlot.BUCKET_INPUT_SLOT.ordinal(), EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), scala.Some.apply(fluidTank));
+								System.out.println("merge c>1: " + yes);
+							}
+						} else {
+							IFluidHandlerItem handler = FluidUtil.getFluidHandler(bucketInputSlot);
+							int fillAmount = handler.fill(fluidTank.drain(fluidTank.getFluidAmount(), false), true);
+							if (fillAmount > 0) {
+								fluidTank.drain(fillAmount, true);
+							} else {
+								boolean yes = InventoryUtil.tryMergeFluidItem(this, EnumSlot.BUCKET_INPUT_SLOT.ordinal(), EnumSlot.BUCKET_OUTPUT_SLOT.ordinal(), scala.Option.apply(null));
+								System.out.println("merge c=1: " + yes);
+							}
+						}
 					}
 				}
 			}

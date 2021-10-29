@@ -11,14 +11,17 @@ class FluidInputItemStackPredicate(fluid: Fluid) extends Predicate[ItemStack]() 
       println(s"fluid: $fluid, stack: $stack, handler: ${FluidUtil.getFluidHandler(stack)}")
       if(FluidUtil.getFluidHandler(stack) != null) {
 
+
         println(s"can fill: ${FluidUtil.getFluidHandler(stack).fill(new FluidStack(fluid, 1), false)}")
         for (prop <- FluidUtil.getFluidHandler(stack).getTankProperties) {
-          println(s"\tprop: ${prop.canFillFluidType(new FluidStack(fluid, 1))}")
+          println(s"\tprop: ${prop.getContents}")
         }
       }
 
       Option(FluidUtil.getFluidHandler(stack))
-        .exists(_.fill(new FluidStack(fluid, 1), false) > 0)
+        .exists(_.getTankProperties
+          .exists(property => Option(property.getContents)
+            .forall(content => content.getFluid == fluid && content.amount < property.getCapacity)))
     }
   }
 }
