@@ -1,4 +1,4 @@
-package org.burbokop.exp_craft
+package org.burbokop.exp_craft.test
 
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.IFluidTankProperties

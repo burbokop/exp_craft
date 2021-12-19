@@ -7,7 +7,11 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
-        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.19"
+
+        classpath fileTree(dir: '/home/borys/projects/scala/gradle-scalatest/build/libs',
+                includes: ['gradle-scalatest-0.1-SNAPSHOT.jar'])
+
+        //classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.19"
     }
 }
         
@@ -170,4 +174,9 @@ publishing {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+
+test {
+    runner 'org.burbokop.exp_craft.tools.Runner'
 }
