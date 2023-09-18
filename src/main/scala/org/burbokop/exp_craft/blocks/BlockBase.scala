@@ -1,14 +1,18 @@
 package org.burbokop.exp_craft.blocks
 
+import net.minecraft.world.level.block.Block
 import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{Item, ItemBlock}
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.level.material.Material
 import org.burbokop.exp_craft.ExpCraftMod
 
 
-class BlockBase(material: Material, name: String) extends Block(material) {
-
+class BlockBase(material: Material, name: String) extends Block(BlockBehaviour.Properties.of(material)) {
+	
 	setUnlocalizedName(name)
 	setRegistryName(name)
 
